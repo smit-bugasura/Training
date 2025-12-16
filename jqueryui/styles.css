@@ -1,0 +1,230 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    max-width: 1600px;
+    margin: auto;
+}
+
+.container {
+    font-family: Arial, sans-serif;
+}
+
+/* Make header Fix */
+.header header {
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    height: 15%;
+    background-color: #363062;
+}
+
+.header header h1 {
+    color: #F5F5F5;
+    font-size: 40px;
+}
+
+.left-nav {
+    width: 20%;
+    height: 50%;
+    float: right;
+    padding: 10px;
+    padding-top: 40px;
+    background-color: #4D4C7D;
+    overflow: scroll;
+    scrollbar-width: none;
+}
+
+.left-nav ul {
+    list-style-type: none;
+}
+
+.left-nav ul li {
+    color: #F5F5F5;
+    margin-bottom: 10px;
+    text-align: center;
+    min-height: 4rem;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.content {
+    /* width: 80%; */
+    height: 100%;
+    float: left;
+    background-color: #F5F5F5;
+
+}
+
+ui-tabs-vertical {
+    width: 55em;
+}
+
+.ui-tabs-vertical .ui-tabs-nav {
+    padding: .2em .1em .2em .2em;
+    float: left;
+    width: 12em;
+}
+
+.ui-tabs-vertical .ui-tabs-nav li {
+    clear: left;
+    width: 100%;
+    border-bottom-width: 1px !important;
+    border-right-width: 0 !important;
+    margin: 0 -1px .2em 0;
+}
+
+.ui-tabs-vertical .ui-tabs-nav li a {
+    display: block;
+}
+
+.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active {
+    padding-bottom: 0;
+    padding-right: .1em;
+    border-right-width: 1px;
+}
+
+.ui-tabs-vertical .ui-tabs-panel {
+    padding: 1em;
+    float: right;
+    width: 40em;
+}
+
+.footer {
+    width: 100%;
+    height: 15%;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    font-size: 10px;
+    background-color: #F99417;
+}
+
+.footer p {
+    text-align: center;
+    font-weight: bold;
+    font-size: 18px;
+    color: #F5F5F5;
+}
+
+.js-functions {
+    height: 85vh;
+}
+
+.js-functions h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #363062;
+    font-size: 20px;
+}
+
+.js-functions input {
+    width: 50%;
+    height: 40px;
+    margin-bottom: 20px;
+    font-size: 16px;
+    padding: 5px;
+}
+
+.js-functions button {
+    width: 50%;
+    height: 40px;
+    font-size: 16px;
+    background-color: #F5F5F5;
+    color: #363062;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+
+}
+
+.max-number {
+    width: 50%;
+    height: 50%;
+    float: left;
+    padding: 10px;
+    background-color: #ae7e7eff;
+    overflow: scroll;
+    scrollbar-width: none;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    flex-direction: column
+}
+
+
+.max-number p {
+    color: #363062;
+    margin-top: 20px;
+    font-size: 20px;
+}
+
+
+.reverse-string {
+    width: 50%;
+    height: 50%;
+    float: right;
+    padding: 10px;
+    background-color: #df5151ff;
+    overflow: scroll;
+    scrollbar-width: none;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    flex-direction: column
+}
+
+.reverse-string p {
+    color: #363062;
+    margin-top: 20px;
+    font-size: 20px;
+}
+
+.find-longest-word {
+    width: 50%;
+    height: 50%;
+    float: left;
+    padding: 10px;
+    background-color: #d17373ff;
+    overflow: scroll;
+    scrollbar-width: none;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    flex-direction: column
+}
+
+
+.find-longest-word p {
+    color: #F5F5F5;
+    margin-top: 20px;
+    font-size: 20px;
+}
+
+.save-name-number-cookies {
+    width: 50%;
+    height: 50%;
+    float: right;
+    padding: 10px;
+    background-color: #a15151ff;
+    overflow: scroll;
+    scrollbar-width: none;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.date-picker {
+    width: 50%;
+    /* height: 50%; */
+    float: left;
+    padding: 100px;
+    background-color: #5173d1ff;
+    overflow: scroll;
+    scrollbar-width: none;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    flex-direction: column
+}
