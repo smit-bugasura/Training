@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="header" id="mypage-header">
+            <h1 id="resumeName"></h1>
+        </div>
+        <div class="left-nav" id="mypage-leftnav">
+            <ul>
+                <li>Objective</li>
+                <li>Education</li>
+                <li>Work Experience</li>
+                <li>Projects</li>
+            </ul>
+        </div>
+        <div class="content" id="mypage-centercontent">
+            <ul>
+                <li>My Objective is to obtain a challenging position that allows me to utilize my skills and grow
+                    professionally.</li>
+                <li>MCA from Jain University, Bangalore (2023 - 2025)</li>
+                <li>Intern at Vaxfab Enterprises (01/07/2024 - 31/08/2024)</li>
+                <li>Lyrics Listing App, Library Management System</li>
+            </ul>
+        </div>
+        <div class="footer" id="mypage-footer">
+            <p>Email : smitzaveri1003@gmail.com Phone: <span id="resumePhone"></span></p>
+        </div>
+        <div class="js-functions">
+            <!-- Find Max Number -->
+            <div class="max-number">
+                <h2>Enter Two Numbers:</h2>
+                <input type="number" id="inputOne" placeholder="Enter number 1">
+                <input type="number" id="inputTwo" placeholder="Enter number 2">
+                <button onclick="Max()">Find Max</button>
+                <p>The maximum value is: <strong id="result"></strong></p>
+            </div>
+            <!-- Reverse String -->
+            <div class="reverse-string">
+                <h2>Enter a String:</h2>
+                <input type="text" id="inputString" placeholder="Enter a string">
+                <button onclick="Reverse()">Reverse String</button>
+                <p>The reversed string is: <strong id="reversedString"></strong></p>
+
+            </div>
+            <!-- Find Longest Word -->
+            <div class="find-longest-word">
+                <h2>Enter a Sentence:</h2>
+                <input type="text" id="inputSentence" placeholder="Enter a sentence">
+                <button onclick="FindLongestWord()">Find Longest Word</button>
+                <p>The longest word is: <strong id="longestWord"></strong></p>
+
+
+            </div>
+            <!-- Save Name and Number -->
+            <div class="save-name-number-cookies">
+                <h2>Enter your name and phone number:</h2>
+                <input type="text" id="inputName" placeholder="Enter your name">
+                <input type="number" inputmode="numeric" id="inputphone" placeholder="Enter your phone number">
+                <button type="button" onclick="Save()">Save</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Functions to get Max Number
+        function Max() {
+            let valueOneString = document.getElementById('inputOne').value;
+            let valueTwoString = document.getElementById('inputTwo').value;
+            let numberOne = parseFloat(valueOneString);
+            let numberTwo = parseFloat(valueTwoString);
+            // both value is present
+            if (isNaN(numberOne) || isNaN(numberTwo)) {
+                alert('Please enter two valid numbers.');
+                return;
+            }
+            // both value is equal
+            if (numberOne === numberTwo) {
+                alert('Numbers are equal.');
+                return;
+            }
+            let maxValue = Math.max(numberOne, numberTwo);
+            document.getElementById('result').textContent = maxValue;
+        }
+        // Functions to get Reverse String
+        function Reverse() {
+            let inputString = document.getElementById('inputString').value;
+            if (inputString.length === 0) {
+                alert('Please enter a string.');
+                return;
+            }
+            let reversedString = inputString.split('').reverse().join('');
+            document.getElementById('reversedString').textContent = reversedString;
+        }
+        // Functions to get Longest Word
+        function FindLongestWord() {
+            let inputSentence = document.getElementById('inputSentence').value;
+            if (inputSentence.length === 0) {
+                alert('Please enter a sentence.');
+                return;
+            }
+            let words = inputSentence.split(' ');
+            let longestWord = '';
+            for (let i = 0; i < words.length; i++) {
+                if (words[i].length > longestWord.length) {
+                    longestWord = words[i];
+                }
+            }
+            document.getElementById('longestWord').textContent = longestWord;
+        }
+        // Functions to save name and number in cookies
+        function setCookie(cname, cvalue, exdays) {
+            let d = new Date();
+            d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+            let expires = "expires=" + d.toUTCString();
+            document.cookie = cname + "=" + encodeURIComponent(cvalue) + ";" + expires + ";path=/";
+        }
+        function getCookie(cname) {
+            let name = cname + "=";
+            let ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i].trim();
+                if (c.indexOf(name) === 0) {
+                    return decodeURIComponent(c.substring(name.length));
+                }
+            }
+            return "";
+        }
+        function Save() {
+            let name = document.getElementById('inputName').value;
+            let phone = document.getElementById('inputphone').value;
+            if (phone) {
+                if (phone.length !== 10 || isNaN(phone)) {
+                    alert('Please enter a valid 10-digit phone number.');
+                    return;
+                }
+            }
+            setCookie("name", name, 365);
+            setCookie("phone", phone, 365);
+            // update UI immediately without reload
+            document.getElementById('resumeName').textContent = name;
+            document.getElementById('resumePhone').textContent = phone;
+        }
+        function Load() {
+            let name = getCookie("name");
+            let phone = getCookie("phone");
+            if (name) {
+                document.getElementById('resumeName').textContent = name
+            }
+            else {
+                document.getElementById('resumeName').textContent = 'Smit Zaveri';
+            }
+            if (phone) {
+                document.getElementById('resumePhone').textContent = phone
+            }
+            else {
+                document.getElementById('resumePhone').textContent = '7043635077';
+            }
+        }
+        window.onload = Load;
+    </script>
+
+</body>
+
+</html>
