@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume</title>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.js"></script>
+</head>
+
+<body>
+
+    <div id="myToast" class="custom-toast alert alert-danger alert-dismissible" role="alert"><button type="button"
+            class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <p id="toastMessage">This is a toast message!</p>
+    </div>
+    <section class="container-fluid">
+        <div class="page-header text-center header overflow-auto">
+            <h1 id="resumeName"></h1>
+        </div>
+        <div class="row nav-center-content center-content">
+            <div class="col-sm-12 col-md-3 col-lg-2 tablet-left-nav">
+                <ul class="nav nav-tabs nav-pills nav-stacked tabs-left" role="tablist">
+                    <li class="active"> <a href="#objectives" role="tab" data-toggle="tab"
+                            title="career objectives " >Objective</a></li>
+                    <li><a href="#education" role="tab" data-toggle="tab" title="education">Education <span
+                                class="badge">2</span></a></li>
+                    <li><a href="#work-experience" role="tab" data-toggle="tab" title="work experience">Work
+                            Experience <span class="badge">1</span></a></li>
+                    <li><a href="#projects" role="tab" data-toggle="tab" title="projects">Projects <span
+                                class="badge">2</span></a></li>
+                </ul>
+            </div>
+            <div class="col-sm-12 col-md-9 col-lg-10 tablet-right-content">
+                <div class="tab-content tabs-right-content">
+                    <div id="objectives" class="tab-pane fade in active">
+                        <h2 class="heading-2" class="sub-heading">Objectives:</h2>
+                        <p>
+                            My Objective is to obtain a challenging position that allows me to utilize my skills and
+                            grow
+                            professionally.
+                        </p>
+                    </div>
+                    <div id="education" class="tab-pane fade">
+                        <h2 class="heading-2" class="sub-heading">Education:</h2>
+                        <p>
+                            MCA from Jain University, Bangalore (2023 - 2025) <br>
+                            BCA from Bhagwan Mahavir University (2020 - 2023)
+                        </p>
+                    </div>
+                    <div id="work-experience" class="tab-pane fade">
+                        <h2 class="heading-2" class="sub-heading">Work Experience:</h2>
+                        <p>
+                            Intern at Vaxfab Enterprises (01/07/2024 - 31/08/2024)
+                        </p>
+                    </div>
+                    <div id="projects" class="tab-pane fade">
+                        <h2 class="heading-2" class="sub-heading">Projects:</h2>
+                        <p>
+                            Lyrics Listing App, Library Management System
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <section class="container-fluid">
+            <div class="row">
+
+                <!-- Find Max Number -->
+                <div class="col-xs-12 col-md-6 col-lg-6 mobile-column">
+                    <div class="form-group">
+
+                        <h2>Enter Two Numbers:</h2>
+                        <input type="number" id="inputOne" placeholder="Enter number 1">
+                        <input type="number" id="inputTwo" placeholder="Enter number 2">
+                        <button onclick="Max()"><span class="ui-icon ui-icon-calculator"></span> Find Max</button>
+                        <p>The maximum value is: <strong id="result"></strong></p>
+                    </div>
+                </div>
+                <!-- Reverse String -->
+                <div class="col-xs-12 col-md-6 col-lg-6 mobile-column">
+                    <div class="form-group">
+
+                        <h2>Enter a String:</h2>
+                        <input type="text" id="inputString" placeholder="Enter a string">
+                        <button onclick="Reverse()"><span class="ui-icon ui-icon-pencil"></span>Reverse String</button>
+                        <p>The reversed string is: <strong id="reversedString"></strong></p>
+                    </div>
+                </div>
+                <!-- Find Longest Word -->
+                <div class="col-xs-12 col-md-6 col-lg-6 mobile-column">
+                    <div class="form-group">
+
+                        <h2>Enter a Sentence:</h2>
+                        <input type="text" id="inputSentence" placeholder="Enter a sentence">
+                        <button onclick="FindLongestWord()"><span class="ui-icon ui-icon-note"></span>Find Longest
+                            Word</button>
+                        <p>The longest word is: <strong id="longestWord"></strong></p>
+                    </div>
+
+                </div>
+                <!-- Save Name and Number -->
+                <div class="col-xs-12 col-md-6 col-lg-6 mobile-column">
+                    <div class="form-group">
+
+                        <h2>Enter your name and phone number:</h2>
+                        <input type="text" id="inputName" placeholder="Enter your name">
+                        <input type="number" inputmode="numeric" id="inputphone" placeholder="Enter your phone number">
+                        <button type="button" onclick="Save()"><span class="ui-icon ui-icon-person"></span>Save</button>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-md-12 col-lg-12 mobile-column">
+                    <div class="form-group">
+
+                        <h2> Date Picker </h2>
+                        <input type="text" id="datepicker" placeholder="DD/MM/YYYY" </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Header Model</h4>
+      </div>
+      <div class="modal-body">
+        Header Animation is Done.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Ok</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal"> Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+        </section>
+        <div class="page-footer text-center footer" id="my_page_footer">
+            <footer>
+                <!-- Contact information -->
+                <p>
+                    <span class="footer-span">Contact:</span>
+                    <strong class="footer-strong"><span id="resumePhone"></span></strong>
+                </p>
+                <p>
+                    <span class="footer-span">Email:</span>
+                    <strong class="footer-strong">smitzaveri1003@gmail.com</strong>
+                </p>
+            </footer>
+
+        </div>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <script>
+            $(function () {
+                $('input').prop('disabled', true);
+                $('button').prop('disabled', true);
+
+                $("#container").accordion({
+                    collapsible: true,
+                    heightStyle: "content"
+                });
+                $("#datepicker").datepicker({
+                    dateFormat: "dd/mm/yy",
+                });
+                $("#resumeName").hide().slideDown(1000, function () {
+                    $('input').prop('disabled', false);
+                    $('button').prop('disabled', false);
+                    $('#myModal').modal('show');
+                });
+                // $("#mypage-header").slideDown(10000, function () {
+                //     $("#slide_dialog").dialog({
+                //         modal: true,
+                //         buttons: {
+                //             OK: function () {
+                //                 $(this).dialog("close");
+                //             },
+                //             Cancel: function () {
+                //                 $(this).dialog("close");
+                //             }
+                //         }, 
+                //     });
+                //     $('input').prop('disabled', false);
+                //     $('button').prop('disabled', false);
+
+                // });
+                $(function () {
+                    $("#tabs").tabs({
+                        event: "mouseover"
+                    }).addClass("ui-tabs-vertical ui-helper-clearfix");
+                    $("#tabs li").removeClass("ui-corner-top").addClass("ui-corner-left");
+                });
+                var availableTags = [
+                    "ActionScript",
+                    "AppleScript",
+                    "Asp",
+                    "BASIC",
+                    "C",
+                    "C++",
+                    "Clojure",
+                    "COBOL",
+                    "ColdFusion",
+                    "Erlang",
+                    "Fortran",
+                    "Groovy",
+                    "Haskell",
+                    "Java",
+                    "JavaScript",
+                    "Lisp",
+                    "Perl",
+                    "PHP",
+                    "Python",
+                    "Ruby",
+                    "Scala",
+                    "Scheme"
+                ];
+                $("#inputSentence").autocomplete({
+                    source: availableTags
+                });
+
+            });
+
+            // Displays a small custom toast message (fade in/out)
+            function showToast(message) {
+                $("#toastMessage").text(message);
+                $("#myToast").fadeIn(400).delay(3000).fadeOut(400);
+            }
+            // Functions to get Max Number
+            function Max() {
+                let valueOneString = document.getElementById('inputOne').value;
+                let valueTwoString = document.getElementById('inputTwo').value;
+                let numberOne = parseFloat(valueOneString);
+                let numberTwo = parseFloat(valueTwoString);
+                // both value is present
+                if (isNaN(numberOne) || isNaN(numberTwo)) {
+                    showToast('Please enter valid numbers.');
+                    return;
+                }
+                // both value is equal
+                if (numberOne === numberTwo) {
+                    showToast('Numbers are equal.');
+                    return;
+                }
+                let maxValue = Math.max(numberOne, numberTwo);
+                document.getElementById('result').textContent = maxValue;
+            }
+            // Functions to get Reverse String
+            function Reverse() {
+                let inputString = document.getElementById('inputString').value;
+                if (inputString.length === 0) {
+                    showToast('Please enter a string.');
+                    return;
+                }
+                let reversedString = inputString.split('').reverse().join('');
+                document.getElementById('reversedString').textContent = reversedString;
+            }
+            // Functions to get Longest Word
+            function FindLongestWord() {
+                let inputSentence = document.getElementById('inputSentence').value;
+                if (inputSentence.length === 0) {
+                    showToast('Please enter a sentence.');
+                    return;
+                }
+                let words = inputSentence.split(' ');
+                let longestWord = '';
+                for (let i = 0; i < words.length; i++) {
+                    if (words[i].length > longestWord.length) {
+                        longestWord = words[i];
+                    }
+                }
+                document.getElementById('longestWord').textContent = longestWord;
+            }
+            // Functions to save name and number in cookies
+            function setCookie(cname, cvalue, exdays) {
+                let d = new Date();
+                d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+                let expires = "expires=" + d.toUTCString();
+                document.cookie = cname + "=" + encodeURIComponent(cvalue) + ";" + expires + ";path=/";
+            }
+            function getCookie(cname) {
+                let name = cname + "=";
+                let ca = document.cookie.split(';');
+                for (let i = 0; i < ca.length; i++) {
+                    let c = ca[i].trim();
+                    if (c.indexOf(name) === 0) {
+                        return decodeURIComponent(c.substring(name.length));
+                    }
+                }
+                return "";
+            }
+            function Save() {
+                let name = document.getElementById('inputName').value;
+                let phone = document.getElementById('inputphone').value;
+                if (phone) {
+                    if (phone.length !== 10 || isNaN(phone)) {
+                        showToast('Please enter a valid 10-digit phone number.');
+                        return;
+                    }
+                }
+                setCookie("name", name, 365);
+                setCookie("phone", phone, 365);
+                // update UI immediately without reload
+                document.getElementById('resumeName').textContent = name;
+                document.getElementById('resumePhone').textContent = phone;
+            }
+            function Load() {
+                let name = getCookie("name");
+                let phone = getCookie("phone");
+                if (name) {
+                    document.getElementById('resumeName').textContent = name
+                }
+                else {
+                    document.getElementById('resumeName').textContent = 'Smit Zaveri';
+                }
+                if (phone) {
+                    document.getElementById('resumePhone').textContent = phone
+                }
+                else {
+                    document.getElementById('resumePhone').textContent = '7043635077';
+                }
+            }
+            window.onload = Load;
+        </script>
+
+</body>
+
+</html>
