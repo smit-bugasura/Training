@@ -1,90 +1,90 @@
 * {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
 }
 
 .container {
-    max-width: 1600px;
-    height: 100vh;
-    margin: auto;
-    font-family: Arial, sans-serif;
+	max-width: 1600px;
+	height: 100vh;
+	margin: auto;
+	font-family: Arial, sans-serif;
 }
 
 /* Make header Fix */
 .header {
-    width: 100%;
-    justify-content: center;
-    display: flex;
-    align-items: center;
-    height: 15%;
-    background-color: #363062;
+	width: 100%;
+	justify-content: center;
+	display: flex;
+	align-items: center;
+	height: 15%;
+	background-color: #363062;
 }
 
 .header h1 {
-    color: #F5F5F5;
-    font-size: 40px;
+	color: #F5F5F5;
+	font-size: 40px;
 }
 
 .left-nav {
-    width: 20%;
-    height: 70%;
-    float: right;
-    padding: 10px;
-    padding-top: 40px;
-    background-color: #4D4C7D;
-    overflow: scroll;
-    scrollbar-width: none;
+	width: 20%;
+	height: 70%;
+	float: right;
+	padding: 10px;
+	padding-top: 40px;
+	background-color: #4D4C7D;
+	overflow: scroll;
+	scrollbar-width: none;
 }
 
 .left-nav ul {
-    list-style-type: none;
+	list-style-type: none;
 }
 
 .left-nav ul li {
-    color: #F5F5F5;
-    margin-bottom: 10px;
-    text-align: center;
-    min-height: 4rem;
-    font-size: 18px;
-    font-weight: bold;
+	color: #F5F5F5;
+	margin-bottom: 10px;
+	text-align: center;
+	min-height: 4rem;
+	font-size: 18px;
+	font-weight: bold;
 }
 
 .content {
-    width: 80%;
-    height: 70%;
-    float: left;
-    padding: 40px 20px 20px 20px;
-    background-color: #F5F5F5;
-    overflow: scroll;
-    scrollbar-width: none;
+	width: 80%;
+	height: 70%;
+	float: left;
+	padding: 40px 20px 20px 20px;
+	background-color: #F5F5F5;
+	overflow: scroll;
+	scrollbar-width: none;
 
 }
 
 .content ul {
-    list-style-type: none;
+	list-style-type: none;
 }
 
 .content ul li {
-    color: #363062;
-    margin-bottom: 10px;
-    min-height: 4rem;
-    font-size: 18px;
+	color: #363062;
+	margin-bottom: 10px;
+	min-height: 4rem;
+	font-size: 18px;
 }
 
 .footer {
-    width: 100%;
-    height: 15%;
-    justify-content: center;
-    display: flex;
-    align-items: center;
-    font-size: 10px;
-    background-color: #F99417;
+	width: 100%;
+	height: 15%;
+	justify-content: center;
+	display: flex;
+	align-items: center;
+	font-size: 10px;
+	background-color: #F99417;
 }
 
 .footer p {
-    text-align: center;
-    font-weight: bold;
-    font-size: 18px;
-    color: #F5F5F5;
+	text-align: center;
+	font-weight: bold;
+	font-size: 18px;
+	color: #F5F5F5;
 }
