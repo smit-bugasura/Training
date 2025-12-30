@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Resume</title>
+		<link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+		<link rel="stylesheet" href="styles.css">
+		<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+		<script src="https://code.jquery.com/ui/1.14.1/jquery-ui.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+	</head>
+	<body class="page-shell">
+		<div id="bootstrap_toast" class="alert alert-info alert-dismissible fade toast-alert" role="alert" aria-live="assertive" aria-atomic="true">
+			<button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<span class="toast_message"></span>
+		</div>
+		<section class="container-fluid">
+			<div class="page-header text-center header overflow-auto">
+				<h1 id="resume_name"></h1>
+			</div>
+			<div class="row nav-center-content center-content">
+				<div class="col-sm-12 col-md-3 col-lg-2 tablet-left-nav">
+					<ul class="nav nav-tabs nav-pills nav-stacked tabs-left" role="tablist">
+						<li class="active"><a href="#objectives" role="tab" data-toggle="tab" title="career objectives">Objective</a></li>
+						<li><a href="#education" role="tab" data-toggle="tab" title="education">Education <span class="badge">2</span></a></li>
+						<li><a href="#work-experience" role="tab" data-toggle="tab" title="work experience">Work Experience <span class="badge">1</span></a></li>
+						<li><a href="#projects" role="tab" data-toggle="tab" title="projects">Projects <span class="badge">2</span></a></li>
+					</ul>
+				</div>
+				<div class="col-sm-12 col-md-9 col-lg-10 tablet-right-content">
+					<div class="tab-content tabs-right-content">
+						<div id="objectives" class="tab-pane fade in active">
+							<h2 class="heading-2 sub-heading">Objectives:</h2>
+							<p>My Objective is to obtain a challenging position that allows me to utilize my skills and grow professionally.</p>
+						</div>
+						<div id="education" class="tab-pane fade">
+							<h2 class="heading-2 sub-heading">Education:</h2>
+							<p>MCA from Jain University, Bangalore (2023 - 2025) <br>BCA from Bhagwan Mahavir University (2020 - 2023)</p>
+						</div>
+						<div id="work-experience" class="tab-pane fade">
+							<h2 class="heading-2 sub-heading">Work Experience:</h2>
+							<p>Intern at Vaxfab Enterprises (01/07/2024 - 31/08/2024)</p>
+						</div>
+						<div id="projects" class="tab-pane fade">
+							<h2 class="heading-2 sub-heading">Projects:</h2>
+							<p>Lyrics Listing App, Library Management System</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12 col-md-6 col-lg-6 mobile-column">
+					<div class="form-group">
+						<h2 class="form-title">Enter Two Numbers:</h2>
+						<input type="number" id="input_one" class="form-input" placeholder="Enter number 1">
+						<input type="number" id="input_two" class="form-input" placeholder="Enter number 2">
+						<button id="max_button" class="action-button btn-action" type="button" data-toggle="tooltip" title="Find the maximum number"><span class="ui-icon ui-icon-calculator"></span> Find Max</button>
+						<p>The maximum value is: <strong id="result"></strong></p>
+					</div>
+				</div>
+				<div class="col-xs-12 col-md-6 col-lg-6 mobile-column">
+					<div class="form-group">
+						<h2 class="form-title">Enter a String:</h2>
+						<input type="text" id="input_string" class="form-input" placeholder="Enter a string">
+						<button id="reverse_button" class="action-button btn-action" type="button" data-toggle="tooltip" title="Reverse the entered string"><span class="ui-icon ui-icon-pencil"></span>Reverse String</button>
+						<p>The reversed string is: <strong id="reversed_string"></strong></p>
+					</div>
+				</div>
+				<div class="col-xs-12 col-md-6 col-lg-6 mobile-column">
+					<div class="form-group">
+						<h2 class="form-title">Enter a Sentence:</h2>
+						<input type="text" id="input_sentence" class="form-input" placeholder="Enter a sentence">
+						<button id="longest_word_button" class="action-button btn-action" type="button" data-toggle="tooltip" title="Find the longest word"><span class="ui-icon ui-icon-note"></span>Find Longest Word</button>
+						<p>The longest word is: <strong id="longest_word"></strong></p>
+					</div>
+				</div>
+				<div class="col-xs-12 col-md-6 col-lg-6 mobile-column">
+					<div class="form-group">
+						<h2 class="form-title">Enter your name and phone number:</h2>
+						<input type="text" id="input_name" class="form-input" placeholder="Enter your name">
+						<input type="number" inputmode="numeric" id="input_phone" class="form-input" placeholder="Enter your phone number">
+						<button id="save_button" class="action-button btn-action" type="button" data-toggle="tooltip" title="Save your details"><span class="ui-icon ui-icon-person"></span>Save</button>
+					</div>
+				</div>
+				<div class="col-xs-12 col-md-12 col-lg-12 mobile-column">
+					<div class="form-group">
+						<h2 class="form-title">Date Picker</h2>
+						<input type="text" id="datepicker" class="form-input" placeholder="DD/MM/YYYY">
+					</div>
+				</div>
+			</div>
+		</section>
+		<div class="modal fade" id="my_modal" tabindex="-1" role="dialog" aria-labelledby="my_modal_label">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title" id="my_modal_label">Header Model</h4>
+					</div>
+					<div class="modal-body">
+						Header Animation is Done.
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Ok</button>
+						<button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="page-footer text-center footer" id="my_page_footer">
+			<footer>
+				<p><span class="footer-span">Contact:</span> <strong class="footer-strong"><span id="resume_phone"></span></strong></p>
+				<p><span class="footer-span">Email:</span> <strong class="footer-strong">smitzaveri1003@gmail.com</strong></p>
+			</footer>
+		</div>
+		<script>
+			// Initialize UI controls when DOM is ready
+			$(document).ready(function() {
+				$('.form-input').prop('disabled', true);
+				$('.action-button').prop('disabled', true);
+			
+				$('#datepicker').datepicker({
+					dateFormat: 'dd/mm/yy'
+				});
+			
+				$('#resume_name').hide().slideDown(1000, function() {
+					$('.form-input').prop('disabled', false);
+					$('.action-button').prop('disabled', false);
+					$('#my_modal').modal('show');
+				});
+			
+				var available_tags = [
+					'ActionScript', 'AppleScript', 'Asp', 'BASIC', 'C', 'C++', 'Clojure', 'COBOL', 'ColdFusion', 'Erlang', 'Fortran', 'Groovy', 'Haskell', 'Java', 'JavaScript', 'Lisp', 'Perl', 'PHP', 'Python', 'Ruby', 'Scala', 'Scheme'
+				];
+				$('#input_sentence').autocomplete({
+					source: available_tags,
+					minLength: 0
+				});
+			
+				// Show autocomplete suggestions when input gains focus or is clicked
+				$('#input_sentence').on('focus click', function() {
+					$(this).autocomplete('search', '');
+				});
+			
+				$('[data-toggle="tooltip"]').tooltip();
+			
+				$('#max_button').on('click', handleFindMax);
+				$('#reverse_button').on('click', handleReverseString);
+				$('#longest_word_button').on('click', handleFindLongestWord);
+				$('#save_button').on('click', handleSave);
+				$('#bootstrap_toast .close').on('click', function() {
+					$('#bootstrap_toast').fadeOut(200).removeClass('in');
+				});
+			
+				var name = getCookie('name');
+				var phone = getCookie('phone');
+				if (name) {
+					$('#resume_name').text(name);
+				} else {
+					$('#resume_name').text('Smit Zaveri');
+				}
+				if (phone) {
+					$('#resume_phone').text(phone);
+				} else {
+					$('#resume_phone').text('7043635077');
+				}
+			});
+			
+			// Show toast notification using Bootstrap alert
+			function showToast(message) {
+				var $toast = $('#bootstrap_toast');
+				$toast.find('.toast_message').text(message);
+				$toast.stop(true, true).fadeIn(150).addClass('in');
+				setTimeout(function() {
+					$toast.fadeOut(300, function() {
+						$toast.removeClass('in');
+					});
+				}, 3000);
+			}
+			
+			// Find the maximum of two numbers
+			function handleFindMax() {
+				var value_one_string = $('#input_one').val();
+				var value_two_string = $('#input_two').val();
+				var number_one = parseFloat(value_one_string);
+				var number_two = parseFloat(value_two_string);
+			
+				if (isNaN(number_one) || isNaN(number_two)) {
+					showToast('Please enter valid numbers.');
+					return;
+				}
+			
+				if (number_one === number_two) {
+					showToast('Numbers are equal.');
+					return;
+				}
+			
+				var max_value = Math.max(number_one, number_two);
+				$('#result').text(max_value);
+			}
+			
+			// Reverse the provided string
+			function handleReverseString() {
+				var input_string = $('#input_string').val();
+				if (input_string.length === 0) {
+					showToast('Please enter a string.');
+					return;
+				}
+			
+				var reversed_string = input_string.split('').reverse().join('');
+				$('#reversed_string').text(reversed_string);
+			}
+			
+			// Locate the longest word in a sentence
+			function handleFindLongestWord() {
+				var input_sentence = $('#input_sentence').val();
+				if (input_sentence.length === 0) {
+					showToast('Please enter a sentence.');
+					return;
+				}
+			
+				var words = input_sentence.split(' ');
+				var longest_word = '';
+				for (var index = 0; index < words.length; index++) {
+					if (words[index].length > longest_word.length) {
+						longest_word = words[index];
+					}
+				}
+			
+				$('#longest_word').text(longest_word);
+			}
+			
+			// Persist name and phone in cookies and update UI
+			function handleSave() {
+				var name = $('#input_name').val();
+				var phone = $('#input_phone').val();
+			
+				if (phone) {
+					if (phone.length !== 10 || isNaN(phone)) {
+						showToast('Please enter a valid 10-digit phone number.');
+						return;
+					}
+				}
+			
+				setCookie('name', name, 365);
+				setCookie('phone', phone, 365);
+			
+				$('#resume_name').text(name);
+				$('#resume_phone').text(phone);
+				showToast('Data saved successfully!');
+			}
+			
+			// Create a cookie with an expiry window
+			function setCookie(cname, cvalue, exdays) {
+				var d = new Date();
+				d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+				var expires = 'expires=' + d.toUTCString();
+				document.cookie = cname + '=' + encodeURIComponent(cvalue) + ';' + expires + ';path=/';
+			}
+			
+			// Retrieve a cookie value by name
+			function getCookie(cname) {
+				var name = cname + '=';
+				var ca = document.cookie.split(';');
+				for (var index = 0; index < ca.length; index++) {
+					var c = ca[index].trim();
+					if (c.indexOf(name) === 0) {
+						return decodeURIComponent(c.substring(name.length));
+					}
+				}
+				return '';
+			}
+			
+			// Load persisted values into the UI
+			function loadSavedData() {
+				var name = getCookie('name');
+				var phone = getCookie('phone');
+			
+				if (name) {
+					$('#resume_name').text(name);
+				} else {
+					$('#resume_name').text('Smit Zaveri');
+				}
+			
+				if (phone) {
+					$('#resume_phone').text(phone);
+				} else {
+					$('#resume_phone').text('7043635077');
+				}
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Resume</title>
+		<link rel="stylesheet" href="styles.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	</head>
+	<body>
+		<div class="container">
+			<div class="header" id="mypage-header">
+				<h1 id="resume_name"></h1>
+			</div>
+			<div class="left-nav" id="mypage-leftnav">
+				<ul>
+					<li>Objective</li>
+					<li>Education</li>
+					<li>Work Experience</li>
+					<li>Projects</li>
+				</ul>
+			</div>
+			<div class="content" id="mypage-centercontent">
+				<table border="1">
+					<tr>
+						<td>My Objective is to obtain a challenging position that allows me to utilize my skills and grow
+							professionally.
+						</td>
+					</tr>
+					<tr>
+						<td>MCA from Jain University, Bangalore (2023 - 2025)</td>
+					</tr>
+					<tr>
+						<td>Intern at Vaxfab Enterprises (01/07/2024 - 31/08/2024)</td>
+					</tr>
+					<tr>
+						<td>Lyrics Listing App, Library Management System</td>
+					</tr>
+				</table>
+			</div>
+			<div class="js-functions">
+				<!-- Find Max Number -->
+				<div class="max-number">
+					<h2>Enter Two Numbers:</h2>
+					<input type="number" id="input_one" placeholder="Enter number 1">
+					<input type="number" id="input_two" placeholder="Enter number 2">
+					<button id="btn_max">Find Max</button>
+					<p>The maximum value is: <strong id="result"></strong></p>
+				</div>
+				<!-- Reverse String -->
+				<div class="reverse-string">
+					<h2>Enter a String:</h2>
+					<input type="text" id="input_string" placeholder="Enter a string">
+					<button id="btn_reverse">Reverse String</button>
+					<p>The reversed string is: <strong id="reversed_string"></strong></p>
+				</div>
+				<!-- Find Longest Word -->
+				<div class="find-longest-word">
+					<h2>Enter a Sentence:</h2>
+					<input type="text" id="input_sentence" placeholder="Enter a sentence">
+					<button id="btn_longest">Find Longest Word</button>
+					<p>The longest word is: <strong id="longest_word"></strong></p>
+				</div>
+				<!-- Save Name and Number -->
+				<div class="save-name-number-cookies">
+					<h2>Enter your name and phone number:</h2>
+					<input type="text" id="input_name" placeholder="Enter your name">
+					<input type="number" inputmode="numeric" id="input_phone" placeholder="Enter your phone number">
+					<button type="button" id="btn_save">Save</button>
+				</div>
+			</div>
+			<div class="footer" id="mypage-footer">
+				<p>Email : smitzaveri1003@gmail.com Phone: <span id="resume_phone"></span></p>
+			</div>
+		</div>
+		<script>
+			$(document).ready(function () {
+				// add background-color
+				$("#mypage-centercontent").css('background-color', '#FFFF88')
+				// remove border from input
+				$("input").css('border-width', 0)
+				// give color and border-color to table
+				$("table").css({
+					'color': '#CC0000',
+					'border-color': '#FF1A00'
+				})
+				// Hide footer
+				$("#mypage-footer").hide()
+				// Add refence before footer
+				$("#mypage-footer").before("<div class='footer-before'><h2>References </h2> - <a herf='https://www.w3schools.com/jquery/jquery_get_started.asp'> JQuery W3Schools</a><div>")
+				// add animation to header on mouseover and mouseout
+				$("#mypage-header").css({
+					'height': '10px',
+					'font-size': '4px'
+				})
+				$("#mypage-header").hover(function () {
+					$(this).css({
+						'height': '15%',
+						'font-size': '40px'
+					})
+				},
+					function () {
+						$(this).css({
+							'height': '10px',
+							'font-size': '4px'
+						})
+					})
+				// add animation to footer and callback on complete
+				$("#mypage-footer").slideDown(2000, function () {
+					alert("Animation is complete");
+				});
+
+				// Load cookies on page ready
+				loadCookies();
+
+				// Event handlers for buttons
+				$("#btn_max").click(function () {
+					Max();
+				});
+
+				$("#btn_reverse").click(function () {
+					Reverse();
+				});
+
+				$("#btn_longest").click(function () {
+					FindLongestWord();
+				});
+
+				$("#btn_save").click(function () {
+					Save();
+				});
+
+				// Function to get Max Number
+				function Max() {
+					let valueOneString = $("#input_one").val();
+					let valueTwoString = $("#input_two").val();
+					let numberOne = parseFloat(valueOneString);
+					let numberTwo = parseFloat(valueTwoString);
+					// both value is present
+					if (isNaN(numberOne) || isNaN(numberTwo)) {
+						alert('Please enter two valid numbers.');
+						return;
+					}
+					// both value is equal
+					if (numberOne === numberTwo) {
+						alert('Numbers are equal.');
+						return;
+					}
+					let maxValue = Math.max(numberOne, numberTwo);
+					$("#result").text(maxValue);
+				}
+
+				// Function to get Reverse String
+				function Reverse() {
+					let inputString = $("#input_string").val();
+					if (inputString.length === 0) {
+						alert('Please enter a string.');
+						return;
+					}
+					let reversedString = inputString.split('').reverse().join('');
+					$("#reversed_string").text(reversedString);
+				}
+
+				// Function to get Longest Word
+				function FindLongestWord() {
+					let inputSentence = $("#input_sentence").val();
+					if (inputSentence.length === 0) {
+						alert('Please enter a sentence.');
+						return;
+					}
+					let words = inputSentence.split(' ');
+					let longestWord = '';
+					for (let i = 0; i < words.length; i++) {
+						if (words[i].length > longestWord.length) {
+							longestWord = words[i];
+						}
+					}
+					$("#longest_word").text(longestWord);
+				}
+
+				// Function to set cookie
+				function setCookie(cname, cvalue, exdays) {
+					let d = new Date();
+					d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+					let expires = "expires=" + d.toUTCString();
+					document.cookie = cname + "=" + encodeURIComponent(cvalue) + ";" + expires + ";path=/";
+				}
+
+				// Function to get cookie
+				function getCookie(cname) {
+					let name = cname + "=";
+					let ca = document.cookie.split(';');
+					for (let i = 0; i < ca.length; i++) {
+						let c = ca[i].trim();
+						if (c.indexOf(name) === 0) {
+							return decodeURIComponent(c.substring(name.length));
+						}
+					}
+					return "";
+				}
+
+				// Function to save name and number in cookies
+				function Save() {
+					let name = $("#input_name").val().trim();
+					let phone = $("#input_phone").val().trim();
+
+					// Validate that field is filled
+					if (!name || !phone) {
+						alert('Please enter at least a name or phone number.');
+						return;
+					}
+
+					// Validate phone if provided
+					if (phone) {
+						if (phone.length !== 10 || isNaN(phone)) {
+							alert('Please enter a valid 10-digit phone number.');
+							return;
+						}
+					}
+
+					// Only save non-empty values
+					if (name) {
+						setCookie("name", name, 365);
+						$("#resume_name").text(name);
+					}
+					if (phone) {
+						setCookie("phone", phone, 365);
+						$("#resume_phone").text(phone);
+					}
+				}
+
+				// Function to load cookies
+				function loadCookies() {
+					let name = getCookie("name");
+					let phone = getCookie("phone");
+					if (name) {
+						$("#resume_name").text(name);
+					} else {
+						$("#resume_name").text('Smit Zaveri');
+					}
+					if (phone) {
+						$("#resume_phone").text(phone);
+					} else {
+						$("#resume_phone").text('7043635077');
+					}
+				}
+			});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Resume</title>
+		<link
+			rel="stylesheet"
+			href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css"
+			/>
+		<link rel="stylesheet" href="styles.css" />
+		<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+		<script src="https://code.jquery.com/ui/1.14.1/jquery-ui.js"></script>
+	</head>
+	<body>
+		<div class="container" id="container">
+			<h3>Header</h3>
+			<div id="mypage-header" class="header">
+				<!-- Header section -->
+				<header style="display: none">
+					<!-- Main heading -->
+					<h1 id="resume_name">Smit</h1>
+				</header>
+			</div>
+			<h3>Center Content</h3>
+			<div>
+				<div id="tabs">
+					<ul class="left-nav">
+						<li><a href="#tabs-1">Objective</a></li>
+						<li><a href="#tabs-2">Education</a></li>
+						<li><a href="#tabs-3">Work Experience</a></li>
+						<li><a href="#tabs-4">Projects</a></li>
+					</ul>
+					<div class="content">
+						<div id="tabs-1">
+							<p>
+								My Objective is to obtain a challenging position that allows me
+								to utilize my skills and grow professionally.
+							</p>
+						</div>
+						<div id="tabs-2">
+							<p>MCA from Jain University, Bangalore (2023 - 2025)</p>
+						</div>
+						<div id="tabs-3">
+							<p>Intern at Vaxfab Enterprises (01/07/2024 - 31/08/2024)</p>
+						</div>
+						<div id="tabs-4">
+							<p>Lyrics Listing App, Library Management System</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="js-functions">
+			<!-- Find Max Number -->
+			<div class="max-number">
+				<h2>Enter Two Numbers:</h2>
+				<input type="number" id="input_one" placeholder="Enter number 1" />
+				<input type="number" id="input_two" placeholder="Enter number 2" />
+				<button id="btn_max">
+				<span class="ui-icon ui-icon-calculator"></span> Find Max
+				</button>
+				<p>The maximum value is: <strong id="result"></strong></p>
+			</div>
+			<!-- Reverse String -->
+			<div class="reverse-string">
+				<h2>Enter a String:</h2>
+				<input type="text" id="input_string" placeholder="Enter a string" />
+				<button id="btn_reverse">
+				<span class="ui-icon ui-icon-pencil"></span>Reverse String
+				</button>
+				<p>The reversed string is: <strong id="reversed_string"></strong></p>
+			</div>
+			<!-- Find Longest Word -->
+			<div class="find-longest-word">
+				<h2>Enter a Sentence:</h2>
+				<input type="text" id="input_sentence" placeholder="Enter a sentence" />
+				<button id="btn_longest_word">
+				<span class="ui-icon ui-icon-note"></span>Find Longest Word
+				</button>
+			<p>The longest word is: <strong id="longest_word"></strong></p>
+			</div>
+			<!-- Save Name and Number -->
+			<div class="save-name-number-cookies">
+				<h2>Enter your name and phone number:</h2>
+				<input type="text" id="input_name" placeholder="Enter your name" />
+				<input
+                type="number"
+					inputmode="numeric"
+					id="input_phone"
+					placeholder="Enter your phone number"
+					/>
+				<button type="button" id="btn_save">
+				<span class="ui-icon ui-icon-person"></span>Save
+				</button>
+			</div>
+			<div class="date-picker">
+				<h2>Date Picker</h2>
+					<input type="text" id="datepicker" placeholder="DD/MM/YYYY">
+			</div>
+		</div>
+		<div id="slide_dialog" title="Slide completed" style="display: none">
+			<p>Header slide-down animation is completed</p>
+		</div>
+        <div class="footer" id="mypage-footer">
+            <p>
+                Email : smitzaveri1003@gmail.com Phone:
+                <span id="resume_phone"></span>
+            </p>
+        </div>
+		<script>
+			// Cookie Management Functions
+			function setCookie(cname, cvalue, exdays) {
+				let d = new Date();
+				d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
+				let expires = "expires=" + d.toUTCString();
+				document.cookie = cname + "=" + encodeURIComponent(cvalue) + ";" + expires + ";path=/";
+			}
+
+			function getCookie(cname) {
+				let name = cname + "=";
+				let ca = document.cookie.split(";");
+				for (let i = 0; i < ca.length; i++) {
+					let c = ca[i].trim();
+					if (c.indexOf(name) === 0) {
+						return decodeURIComponent(c.substring(name.length));
+					}
+				}
+				return "";
+			}
+
+			// Form Input Functions
+			function Max() {
+				let valueOneString = document.getElementById("input_one").value;
+				let valueTwoString = document.getElementById("input_two").value;
+				let numberOne = parseFloat(valueOneString);
+				let numberTwo = parseFloat(valueTwoString);
+
+				if (isNaN(numberOne) || isNaN(numberTwo)) {
+					alert("Please enter two valid numbers.");
+					return;
+				}
+
+				if (numberOne === numberTwo) {
+					alert("Numbers are equal.");
+					return;
+				}
+
+				let maxValue = Math.max(numberOne, numberTwo);
+				document.getElementById("result").textContent = maxValue;
+			}
+
+			function Reverse() {
+				let inputString = document.getElementById("input_string").value;
+				if (inputString.length === 0) {
+					alert("Please enter a string.");
+					return;
+				}
+
+				let reversedString = inputString.split("").reverse().join("");
+				document.getElementById("reversed_string").textContent = reversedString;
+			}
+
+			function FindLongestWord() {
+				let inputSentence = document.getElementById("input_sentence").value;
+				if (inputSentence.length === 0) {
+					alert("Please enter a sentence.");
+					return;
+				}
+
+				let words = inputSentence.split(" ");
+				let longestWord = "";
+				for (let i = 0; i < words.length; i++) {
+					if (words[i].length > longestWord.length) {
+						longestWord = words[i];
+					}
+				}
+
+				document.getElementById("longest_word").textContent = longestWord;
+			}
+
+			function Save() {
+				let name = document.getElementById("input_name").value;
+				let phone = document.getElementById("input_phone").value;
+
+				if (phone) {
+					if (phone.length !== 10 || isNaN(phone)) {
+						alert("Please enter a valid 10-digit phone number.");
+						return;
+					}
+				}
+
+				setCookie("name", name, 365);
+				setCookie("phone", phone, 365);
+				document.getElementById("resume_name").textContent = name;
+				document.getElementById("resume_phone").textContent = phone;
+			}
+
+			function Load() {
+				let name = getCookie("name");
+				let phone = getCookie("phone");
+
+				if (name) {
+					document.getElementById("resume_name").textContent = name;
+				} else {
+					document.getElementById("resume_name").textContent = "Smit Zaveri";
+				}
+
+				if (phone) {
+					document.getElementById("resume_phone").textContent = phone;
+				} else {
+					document.getElementById("resume_phone").textContent = "7043635077";
+				}
+			}
+
+			// jQuery Document Ready Block
+			$(function () {
+				// Disable form inputs and buttons initially
+				$("#container input").prop("disabled", true);
+				$("#container button").prop("disabled", true);
+
+				// Initialize accordion widget
+				$("#container").accordion({
+					collapsible: true,
+					heightStyle: "content",
+				});
+
+				// Initialize date picker
+				$("#datepicker").datepicker({
+					dateFormat: "dd/mm/yy",
+				});
+
+				// Header slide down animation with dialog
+				$("#mypage-header header").slideDown(10000, function () {
+					$("#slide_dialog").dialog({
+						modal: true,
+						buttons: {
+							OK: function () {
+								$(this).dialog("close");
+							},
+							Cancel: function () {
+								$(this).dialog("close");
+							},
+						},
+					});
+					$("#container input").prop("disabled", false);
+					$("#container button").prop("disabled", false);
+				});
+
+				// Initialize tabs widget
+				$("#tabs").tabs({
+					event: "mouseover",
+				}).addClass("ui-tabs-vertical ui-helper-clearfix");
+				$("#tabs li").removeClass("ui-corner-top").addClass("ui-corner-left");
+
+				// Autocomplete data for sentence input
+				var availableTags = [
+					"ActionScript",
+					"AppleScript",
+					"Asp",
+					"BASIC",
+					"C",
+					"C++",
+					"Clojure",
+					"COBOL",
+					"ColdFusion",
+					"Erlang",
+					"Fortran",
+					"Groovy",
+					"Haskell",
+					"Java",
+					"JavaScript",
+					"Lisp",
+					"Perl",
+					"PHP",
+					"Python",
+					"Ruby",
+					"Scala",
+					"Scheme",
+				];
+
+				// Initialize autocomplete for sentence input
+				$("#input_sentence").autocomplete({
+					source: availableTags,
+					minLength: 0,
+				});
+
+				// Show suggestions when the input is focused or clicked
+				$("#input_sentence").on("focus click", function () {
+					$(this).autocomplete("search", "");
+				});
+
+				// Button click event handlers
+				$("#btn_max").on("click", Max);
+				$("#btn_reverse").on("click", Reverse);
+				$("#btn_longest_word").on("click", FindLongestWord);
+				$("#btn_save").on("click", Save);
+
+				// Load cookies on page ready
+				Load();
+			});
+		</script>
+	</body>
+</html>
