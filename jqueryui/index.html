@@ -104,7 +104,7 @@
 		</div>
         <div class="footer" id="mypage-footer">
             <p>
-                Email : smitzaveri1003@gmail.com Phone:
+                Email: smitzaveri1003@gmail.com Phone:
                 <span id="resume_phone"></span>
             </p>
         </div>
@@ -182,6 +182,11 @@
 			function Save() {
 				let name = document.getElementById("input_name").value;
 				let phone = document.getElementById("input_phone").value;
+
+				if (!name || !phone) {
+					alert('Please enter at least a name or phone number.');
+					return;
+				}
 
 				if (phone) {
 					if (phone.length !== 10 || isNaN(phone)) {

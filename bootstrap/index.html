@@ -236,6 +236,10 @@
 			function handleSave() {
 				var name = $('#input_name').val();
 				var phone = $('#input_phone').val();
+				if (!name || !phone) {
+					alert('Please enter at least a name or phone number.');
+					return;
+				}
 			
 				if (phone) {
 					if (phone.length !== 10 || isNaN(phone)) {
