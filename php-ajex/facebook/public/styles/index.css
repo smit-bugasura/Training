@@ -739,9 +739,14 @@ a {
 	margin: 0;
 }
 
+.post-section .personal-details .communities {
+	margin-top: -5px;
+}
+
 .post-section .personal-details div {
 	margin-bottom: -3px;
 }
+
 
 .post-section .personal-details div span {
 	margin-left: -1px;
@@ -753,7 +758,7 @@ a {
 	color: #65686C;
 	cursor: pointer;
 	margin-top: 4px;
-	margin-left: 50px;
+	margin-left: 52px;
 	line-height: 1.2308;
 
 }
@@ -764,7 +769,7 @@ a {
 	color: #65686C;
 	cursor: pointer;
 	margin-top: -10px;
-	margin-left: 50px;
+	margin-left: 52px;
 	line-height: 1.2308;
 
 }
@@ -776,6 +781,14 @@ a {
 .post-section .personal-details div img.work-logo {
 	border: #7c7c7c65 solid 0.5px;
 	border-radius: 50%;
+}
+
+.meta-card {
+	margin-top: -1px;
+}
+
+.post-section .personal-details div img.meta-img {
+	margin-top: 6px;
 }
 
 .post-section .personal-details div.right-personal-details-card {
@@ -890,6 +903,10 @@ div.personal-details-card:hover {
 	align-items: center;
 	gap: 6px;
 	height: 36px;
+}
+
+.post-section .posts-content .post-filter-card .post-filter-dropdown span {
+	margin-top: -1px;
 }
 
 .post-section .posts-content .post-form-card {
@@ -1170,6 +1187,36 @@ div.personal-details-card:hover {
 	/* border-bottom: #958c8c solid 1px; */
 }
 
+.post-section .posts-content .post-card .post-like-comments-share-btn .like-btn i {
+	background-image: url(https://static.xx.fbcdn.net/rsrc.php/v4/yp/r/SUp2gyEkEE4.png);
+	background-position: 0px -854px;
+	background-size: auto;
+	width: 20px;
+	height: 20px;
+	background-repeat: no-repeat;
+	display: inline-block;
+}
+
+.post-section .posts-content .post-card .post-like-comments-share-btn .comment-btn i {
+	background-image: url(https://static.xx.fbcdn.net/rsrc.php/v4/yp/r/SUp2gyEkEE4.png);
+	background-position: 0px -812px;
+	background-size: auto;
+	width: 20px;
+	height: 20px;
+	background-repeat: no-repeat;
+	display: inline-block;
+}
+
+.post-section .posts-content .post-card .post-like-comments-share-btn .share-btn1 i {
+	background-image: url(https://static.xx.fbcdn.net/rsrc.php/v4/yp/r/SUp2gyEkEE4.png);
+	background-position: 0px -896px;
+	background-size: auto;
+	width: 20px;
+	height: 20px;
+	background-repeat: no-repeat;
+	display: inline-block;
+}
+
 .post-section .posts-content .post-card .post-like-comments-share-btn div {
 	display: flex;
 	align-items: center;
@@ -1403,8 +1450,17 @@ div.personal-details-card:hover {
 	text-align: center;
 }
 
+.logout {
+	background-image: url('../images/logout-sprite.png');
+	background-position: 0px -113px;
+	background-size: auto;
+	width: 20px;
+	height: 20px;
+	background-repeat: no-repeat;
+	display: inline-block;
+}
 
-.model{
+.model {
 	top: 50%;
 	left: 50%;
 	right: unset;
@@ -1420,12 +1476,13 @@ div.personal-details-card:hover {
 	border-radius: 12px;
 }
 
-.model .edit-profile-form{
+.model .edit-profile-form {
 	display: flex;
 	flex-direction: column;
 	gap: 12px;
 }
-.model .edit-profile-form input{
+
+.model .edit-profile-form input {
 	width: 300px;
 	padding: 10px;
 	border: #cccccc solid 1px;
@@ -1434,11 +1491,13 @@ div.personal-details-card:hover {
 	font-size: 15px;
 	font-family: Arial, Helvetica, sans-serif;
 }
-.model .edit-profile-form input:focus{
+
+.model .edit-profile-form input:focus {
 	border: #0866FF solid 1.5px;
 	border-radius: 8px;
 }
-.model .edit-profile-form label{
+
+.model .edit-profile-form label {
 	font-size: 15px;
 	font-weight: 600;
 	color: #080809;
@@ -1446,7 +1505,7 @@ div.personal-details-card:hover {
 	margin: 0;
 }
 
-.model .edit-profile-form button{
+.model .edit-profile-form button {
 	padding: 10px;
 	background-color: #0866FF;
 	color: #ffffff;
@@ -1458,7 +1517,9 @@ div.personal-details-card:hover {
 	font-family: Arial, Helvetica, sans-serif;
 }
 
-
+.hide {
+	display: none;
+}
 
 
 @media (max-width: 2560px) {
@@ -1472,6 +1533,10 @@ div.personal-details-card:hover {
 		cursor: pointer;
 		border-radius: 8px;
 		margin: 0 4px;
+	}
+
+	.post-section .posts-content {
+		max-width: 680px;
 	}
 }
 
@@ -1682,11 +1747,6 @@ div.personal-details-card:hover {
 
 	}
 
-	.post-section .personal-details {
-
-		margin-right: 0;
-	}
-
 	.post-section .photos-details {
 		padding-top: 10px;
 		margin-bottom: 16px;
@@ -1703,6 +1763,7 @@ div.personal-details-card:hover {
 		margin-right: 0;
 
 	}
+
 }
 
 @media (max-width:480px) {

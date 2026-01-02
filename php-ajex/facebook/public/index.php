@@ -29,6 +29,7 @@ if (!$loggedIn) {
 $stmt = $conn->query("SELECT * FROM tUser");
 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+// Get the profile id from the URL parameter, if present
 $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
 
@@ -39,6 +40,7 @@ if ($loggedIn) {
 	$uStmt->execute([':id' => $loggedUser['user_id']]);
 	$userFull = $uStmt->fetch(PDO::FETCH_ASSOC);
 
+	// check for profile id in parameter
 	if ($id) {
 		$pStmt = $conn->prepare('SELECT * FROM tUser WHERE user_id = :id LIMIT 1');
 		$pStmt->execute([':id' => $id]);
@@ -50,6 +52,8 @@ if ($loggedIn) {
 		}
 	}
 }
+
+// list all posts
 if (!$id) {
 	$pStmt = $conn->prepare("SELECT tWall.*, tUser.name FROM tWall JOIN tUser ON tWall.user_id = tUser.user_id WHERE tWall.user_id = :id OR tWall.user_id IN (SELECT friend_id FROM tFriends WHERE user_id = :id) ");
 	$pStmt->execute([':id' => $loggedUser['user_id']]);
@@ -71,6 +75,7 @@ if (!$id) {
 }
 
 
+// Handle new post form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['preText'])) {
 	$postText = trim($_POST['preText']);
 	if ($postText) {
@@ -79,12 +84,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['preText'])) {
 		$stmt = $conn->prepare("INSERT INTO tWall (user_id, post, posting_date) VALUES (?, ?, ?)");
 		$stmt->execute([$userId, $postText, $postingDate]);
 		echo "Post added successfully";
+
 	} else {
 		echo "Empty post";
 	}
 	exit;
 }
 
+// Handle profile update form submission
 if (
 	$_SERVER["REQUEST_METHOD"] === "POST" &&
 	(
@@ -106,6 +113,7 @@ if (
 	$updateFields = [];
 	$params = [':id' => $userId];
 
+	// Prepare the fields to be updated based on provided input
 	if ($name) {
 		$updateFields[] = "name = :name";
 		$params[':name'] = $name;
@@ -129,6 +137,7 @@ if (
 		$params[':phone'] = $phone;
 	}
 
+	// Perform the update if there are fields to update
 	if (!empty($updateFields)) {
 		$sql = "UPDATE tUser SET " . implode(", ", $updateFields) . " WHERE user_id = :id";
 		$stmt = $conn->prepare($sql);
@@ -160,7 +169,7 @@ if (
 	<navbar class="navbar">
 		<!-- Search section with logo and input field -->
 		<div class="search">
-			<img src="images/facebook_logo.svg" alt="" class="logo">
+			<img src="images/facebook_logo.svg" alt="logo" class="logo">
 			<input type="text" class="fb-search" placeholder="Search Facebook">
 		</div>
 		<!-- Navigation tabs in the middle (Home, Watch, Marketplace, Gaming) -->
@@ -173,42 +182,48 @@ if (
 		<!-- User profile and action icons on the right -->
 		<div class="profile-details">
 			<!-- Menu, messenger, and notifications icons -->
-			<span class="end"><img src="./images/menu_icon.svg" alt="" class="last"></span>
-			<span class="end"><img src="./images/messenger_icon.svg" alt="" class="last"></span>
-			<span class="end"><img src="./images/notifications_icon.svg" alt="" class="last"></span>
+			<span class="end">
+				<img src="./images/menu_icon.svg" alt="menu_icon" class="last">
+			</span>
+			<span class="end">
+				<img src="./images/messenger_icon.svg" alt="message_icon" class="last">
+			</span>
+			<span class="end">
+				<img src="./images/notifications_icon.svg" alt="notification_icon" class="last">
+			</span>
 			<!-- User profile dropdown -->
 			<span class="profiles profile-wrapper end">
-				<img src="./images/user_<?php echo $_SESSION['user_id'] ?>.jpg" class="right-icons profile-icon" height="40"
-					width="40">
+				<img src="./images/user_<?php echo $_SESSION['user_id'] ?>.jpg" alt="user_profile_pic" class="right-icons profile-icon" height="40" width="40">
 				<img src="./images/dropdown_icon.svg" class="drop-icon">
 				<!-- Dropdown menu items -->
 				<ul class="dropdown-menu-profile" id="dropdown-menu">
 					<div class="user-name-section" id="profile_edit">
-						<img src="./images/user_<?php echo $_SESSION['user_id'] ?>.jpg" class="dropdown-profile-icon"
-							height="40" width="40">
+						<img src="./images/user_<?php echo $_SESSION['user_id'] ?>.jpg" alt="user profile" class="dropdown-profile-icon" height="40" width="40">
 						<div class="user-name-role">
 							<span class="user-name"><?php echo ucfirst($userFull['name']); ?></span>
 						</div>
 					</div>
 					<li>
-						<div class="link-icon"><img src="./images/privacy-icon.svg" alt=""></div>
-						<a href="">Settings & privacy</a>
+						<div class="link-icon">
+							<img src="./images/privacy-icon.svg" alt="">
+						</div>
+						<a href="#">Settings & privacy</a>
 					</li>
 					<li>
 						<div class="link-icon">
 							<img src="./images/help-support.svg" width="20" height="20" alt="Help & support">
 						</div>
-						<a href="">Help & support</a>
+						<a href="#">Help & support</a>
 					</li>
 					<li>
 						<div class="link-icon">
 							<img src="./images/display-accessibility.svg" width="20" height="20" alt="Display & accessibility">
 						</div>
-						<a href="">Display & accessibility</a>
+						<a href="#">Display & accessibility</a>
 					</li>
 					<li>
-						<div class="link-icon"><i data-visualcompletion="css-img" class="x1b0d499 xep6ejk" aria-hidden="true"
-								style="background-image: url('./images/logout-sprite.png'); background-position: 0px -113px; background-size: auto; width: 20px; height: 20px; background-repeat: no-repeat; display: inline-block;"></i>
+						<div class="link-icon">
+							<i class="logout" data-visualcompletion="css-img" aria-hidden="true"></i>
 						</div>
 						<a href="logout.php">Log out</a>
 					</li>
@@ -216,20 +231,18 @@ if (
 			</span>
 		</div>
 	</navbar>
+	<!-- Main content section -->
 	<div class="body-section">
 		<div class="gradiant-bg">
 			<section class="main-section">
 				<div class="profile-banner-image">
-					<img src="./images/llama.jpg" alt="" class="banner-image" loading="eager">
+					<img src="./images/llama.jpg" alt="background_img" class="banner-image" loading="eager">
 				</div>
+				<!-- Profile information section -->
 				<div class="profile-info">
 					<div class="info-section">
 						<div class="profile-image">
-							<img height="100%" src="./images/<?php if ($profileFull) {
-																	echo "user_" . $profileFull['user_id'] . '.jpg';
-																} else {
-																	echo "mark-zuck.jpg";
-																} ?>" width="100%" alt="Profile Picture">
+							<img height="100%" src="./images/<?php if ($profileFull) { echo "user_" . $profileFull['user_id'] . '.jpg'; } else { echo "mark-zuck.jpg"; } ?>" width="100%" alt="Profile Picture">
 						</div>
 						<div class="profile-content">
 							<div class="name-follow">
@@ -237,11 +250,7 @@ if (
 									<div class="row-content">
 										<div class="col-content">
 											<h1>
-												<?php if ($profileFull) {
-													echo ucfirst($profileFull['name']);
-												} else {
-													echo 'Mark Zuckerberg';
-												} ?>
+												<?php if ($profileFull) { echo ucfirst($profileFull['name']); } else { echo 'Mark Zuckerberg'; } ?>
 											</h1>
 											<span class="verfiy-icon">
 												<img src="./images/verified.svg" width="16" height="16" alt="Verified account">
@@ -254,12 +263,11 @@ if (
 								</div>
 								<div class="right-profile-content">
 									<div class="follow-button">
-										<img src="./images/follow-icon.png" alt="" aria-hidden="true" height="16" width="16">
+										<img src="./images/follow-icon.png" alt="follow-icon" aria-hidden="true" height="16" width="16">
 										<span>Follow</span>
 									</div>
 									<div class="search-button">
-										<img class="x1b0d499 xep6ejk" src="./images/search-icon.png" alt="" aria-hidden="true"
-											height="16" width="16">
+										<img src="./images/search-icon.png" alt="search-icon" aria-hidden="true" height="16" width="16">
 										<span>Search</span>
 									</div>
 									<div class="dropdown-button">
@@ -270,21 +278,27 @@ if (
 							<div class="profile-tagline">
 								<span>Bringing the world closer together.</span>
 							</div>
+							<!-- Personal information section-->
 							<div class="ed-office-content">
 								<ul>
-									<li><span><img class="x1b0d499 xep6ejk" height="12" width="12"
-												src="./images/public-figure.svg" width="12" alt=""></span> Public figure</li>
+									<li>
+										<span><img height="12" width="12" src="./images/public-figure.svg" width="12" alt=""></span> Public figure
+									</li>
 									<span aria-hidden="true">·</span>
-									<li><span><img class="x1b0d499 xep6ejk" height="12" width="12"
-												src="./images/location-pin.svg" width="12" alt=""></span> Palo Alto, California</li>
+									<li>
+										<span><img height="12" width="12" src="./images/location-pin.svg" width="12" alt=""></span> Palo Alto, California
+									</li>
 									<span aria-hidden="true">·</span>
-									<li><span><img class="x1b0d499 xep6ejk" height="12" width="12"
-												src="./images/office-building.svg" width="12" alt=""></span> Meta</li>
+									<li>
+										<span><img height="12" width="12" src="./images/office-building.svg" width="12" alt=""></span> Meta
+									</li>
 									<span aria-hidden="true">·</span>
-									<li><span><img class="x1b0d499 xep6ejk" height="12" width="12" src="./images/education.svg"
-												width="12" alt=""></span> Harvard University</li>
+									<li>
+										<span><img height="12" width="12" src="./images/education.svg" width="12" alt=""></span> Harvard University
+									</li>
 								</ul>
 							</div>
+							<!-- Friends list section -->
 							<div class="follower-list">
 								<ul>
 									<li><img src="./images/follow1.jpg" alt="follow1" style="--index: 1;"></li>
@@ -328,26 +342,27 @@ if (
 		</div>
 		<div class="post-section-body">
 			<div class="post-section">
+				<!-- Post Section left Part -->
 				<div class="post-section-left">
 					<div class="personal-details">
 						<h3>Personal details</h3>
 						<div class="loaction-details personal-details-card">
-							<img height="24" src="./images/location-outline.svg" width="24" alt="">
+							<img height="24" src="./images/location-outline.svg" width="24" alt="location">
 							<span>Lives in Palo Alto, California</span>
 						</div>
 						<div class="loaction-details personal-details-card">
-							<img height="24" src="./images/home.svg" width="24" alt="">
+							<img height="24" src="./images/home.svg" width="24" alt="home">
 							<span>From Dobbs Ferry, New York</span>
 						</div>
 						<div class="loaction-details personal-details-card">
-							<img height="24" src="./images/birthday.svg" width="24" alt="">
+							<img height="24" src="./images/birthday.svg" width="24" alt="birthday">
 							<span>May 14, 1984</span>
 						</div>
 						<div class="see-more">See more personal details</div>
 						<br>
-						<h3>Communities</h3>
-						<div class="loaction-details personal-details-card">
-							<img class="x1b0d499 xep6ejk" height="24" src="./images/channel.svg" width="24" alt="">
+						<h3 class="communities">Communities</h3>
+						<div class="loaction-details personal-details-card meta-card">
+							<img class="meta-img" height="24" src="./images/channel.svg" width="24" alt="channel">
 							<span>Meta Channel
 							</span>
 						</div>
@@ -356,7 +371,7 @@ if (
 						<h3>Work</h3>
 						<div class="loaction-details personal-details-card work-details-card">
 							<div class="left-personal-details-card">
-								<img class="work-logo" src="./images/meta.jpg" height="40" width="40" alt="">
+								<img class="work-logo" src="./images/meta.jpg" height="40" width="40" alt="meta-logo">
 							</div>
 							<div class="right-personal-details-card">
 								<span class="work-place">Meta</span>
@@ -369,11 +384,10 @@ if (
 						<h3>Education</h3>
 						<div class="loaction-details personal-details-card work-details-card">
 							<div class="left-personal-details-card">
-								<img class="work-logo" src="./images/harvard.jpg" height="40" width="40" alt="">
+								<img class="work-logo" src="./images/harvard.jpg" height="40" width="40" alt="harvard-logo">
 							</div>
 							<div class="right-personal-details-card">
 								<span class="work-place">Harvard University</span>
-								<!-- <span class="work-position">Founder and CEO</span> -->
 								<span class="work-duration">August 30, 2002 - April 30, 2004</span>
 							</div>
 						</div>
@@ -382,7 +396,7 @@ if (
 					<div class="photos-details">
 						<div class="photos-title">
 							<h3>Photos</h3>
-							<a href="">See all photos</a>
+							<a href="#">See all photos</a>
 						</div>
 						<div class="photos-grid">
 							<img src="./images/grid1.jpg" alt="Description 1">
@@ -400,9 +414,10 @@ if (
 				<div class="posts-content">
 					<div class="post-filter-card">
 						<h2>Posts</h2>
+						<!-- Filter dropdown-->
 						<span class="post-filter-dropdown">
 							<img src="./images/filters.svg" width="16" height="16" alt="Filters">
-							<span style="margin-top: -1px;">Filters</span>
+							<span>Filters</span>
 						</span>
 					</div>
 					<?php if (!$id) { ?>
@@ -416,7 +431,7 @@ if (
 										</div>
 									</div>
 									<div class="right-post-form-card-header">
-										<input type="text" name="post-text"
+										<input type="text" name="post-text" class="post-text-input"
 											placeholder="What's on your mind, <?php echo ucfirst($userFull['name']); ?>">
 									</div>
 								</div>
@@ -426,8 +441,8 @@ if (
 							</form>
 						</div>
 					<?php } ?>
-					<div class="currunt-post" id="currunt-post">
-					</div>
+					<!-- Posts section current-->
+					<div class="currunt-post" id="currunt-post"></div>
 					<?php
 					if ($posts)
 						foreach ($posts as $post) {
@@ -438,61 +453,59 @@ if (
 								$user_name = ucfirst($post['name']);
 							}
 							echo <<<_POST
-											<div class="post-card">
-												<div class="post-card-header">
-													<div class="left-post-card-header">
-														<div class="post-profile-image">
-															<img src="./images/user_{$post['user_id']}.jpg"
-																alt="Profile Picture">
-														</div>
-														<div class="post-profile-name">
-															<span>{$user_name} </span>
-															<span>{$date_time} <span aria-hidden="true"> · </span> <img src="./images/public-globe.svg" width="12" height="12" alt="Shared with Public"></span>
-														</div>
-													</div>
-													<div class="right-post-card-header">
-														<img src="./images/menu-dots.svg" width="20" height="20" alt="Post menu">
-													</div>
-									
+									<div class="post-card">
+										<div class="post-card-header">
+											<div class="left-post-card-header">
+												<div class="post-profile-image">
+													<img src="./images/user_{$post['user_id']}.jpg"
+														alt="Profile Picture">
 												</div>
-												<div class="post-content">
-													<div dir="auto" style="text-align:start">{$post['post']}</div>
-												</div>
-												<div class="post-likes-comments-share">
-													<div class="left-post-likes">
-														<div class="img-reactes">
-															<img class="x16dsc37" height="18" role="presentation" width="18"
-																src="./images/reaction-like.svg">
-															<img class="x16dsc37" height="18" role="presentation" width="18"
-																src="./images/reaction-love.svg">
-														</div> 195K
-													</div>
-													<div class="right-post-likes">
-														<span>1.2M comments</span>
-														<span>34K shares</span>
-														<span>9.6M views</span>
-													</div>
-												</div>
-												<div class="post-like-comments-share-btn">
-													<div class="like-btn">
-														<i data-visualcompletion="css-img" class="x1b0d499 xq8hly8"
-															style="background-image: url(&quot;./images/fb-sprite.png&quot;); background-position: 0px -833px; background-size: auto; width: 20px; height: 20px; background-repeat: no-repeat; display: inline-block; color: #909296b2;"></i>
-														<span>Like</span>
-													</div>
-													<div class="comment-btn">
-														<i data-visualcompletion="css-img" class="x1b0d499 x1d69dk1"
-															style="background-image: url(&quot;./images/fb-sprite.png&quot;); background-position: 0px -812px; background-size: auto; width: 20px; height: 20px; background-repeat: no-repeat; display: inline-block;"></i>
-														<span>Comment</span>
-													</div>
-													<div class="share-btn1">
-														<i data-visualcompletion="css-img" class="x1b0d499 x1d69dk1"
-															style="background-image: url(&quot;./images/fb-sprite.png&quot;); background-position: 0px -896px; background-size: auto; width: 20px; height: 20px; background-repeat: no-repeat; display: inline-block;"></i>
-														<span>Share</span>
-													</div>
+												<div class="post-profile-name">
+													<span>{$user_name} </span>
+													<span>{$date_time} <span aria-hidden="true"> · </span> <img src="./images/public-globe.svg" width="12" height="12" alt="Shared with Public"></span>
 												</div>
 											</div>
-											_POST;
-						};
+											<div class="right-post-card-header">
+												<img src="./images/menu-dots.svg" width="20" height="20" alt="Post menu">
+											</div>
+							
+										</div>
+										<div class="post-content">
+											<div>{$post['post']}</div>
+										</div>
+										<div class="post-likes-comments-share">
+											<div class="left-post-likes">
+												<div class="img-reactes">
+													<img height="18" role="presentation" width="18"
+														src="./images/reaction-like.svg">
+													<img height="18" role="presentation" width="18"
+														src="./images/reaction-love.svg">
+												</div> 195K
+											</div>
+											<div class="right-post-likes">
+												<span>1.2M comments</span>
+												<span>34K shares</span>
+												<span>9.6M views</span>
+											</div>
+										</div>
+										<div class="post-like-comments-share-btn">
+											<div class="like-btn">
+												<i data-visualcompletion="css-img" ></i>
+												<span>Like</span>
+											</div>
+											<div class="comment-btn">
+												<i data-visualcompletion="css-img"></i>
+												<span>Comment</span>
+											</div>
+											<div class="share-btn1">
+												<i data-visualcompletion="css-img"></i>
+												<span>Share</span>
+											</div>
+										</div>
+									</div>
+									_POST;
+						}
+					;
 
 					?>
 					<?php if (!$id) { ?>
@@ -503,13 +516,8 @@ if (
 										<img src="./images/mark-zuck.jpg" alt="Profile Picture">
 									</div>
 									<div class="post-profile-name">
-										<span>
-											Mark Zuckerberg
-											<img src="./images/verified.svg" width="12" height="12" alt="Verified account"
-												style="--x-color: var(--accent);">
-										</span>
-										<span>
-											December 16 at 10:58 PM <span aria-hidden="true"> · </span>
+										<span>Mark Zuckerberg <img src="./images/verified.svg" width="12" height="12" alt="Verified account"></span>
+										<span>December 16 at 10:58 PM <span aria-hidden="true"> · </span>
 											<img src="./images/public.svg" width="12" height="12" alt="Shared with Public">
 										</span>
 									</div>
@@ -519,7 +527,7 @@ if (
 								</div>
 							</div>
 							<div class="post-content">
-								<div dir="auto" style="text-align:start">10/10 song choice from the new Spotify feature on
+								<div>10/10 song choice from the new Spotify feature on
 									my Oakley Meta glasses
 								</div>
 								<div class="post-img">
@@ -529,10 +537,8 @@ if (
 							<div class="post-likes-comments-share">
 								<div class="left-post-likes">
 									<div class="img-reactes">
-										<img class="x16dsc37" height="18" role="presentation" width="18"
-											src="./images/reaction-like.svg">
-										<img class="x16dsc37" height="18" role="presentation" width="18"
-											src="./images/reaction-love.svg">
+										<img height="18" role="presentation" width="18" src="./images/reaction-like.svg">
+										<img height="18" role="presentation" width="18" src="./images/reaction-love.svg">
 									</div>
 									195K
 								</div>
@@ -544,18 +550,15 @@ if (
 							</div>
 							<div class="post-like-comments-share-btn">
 								<div class="like-btn">
-									<i data-visualcompletion="css-img" class="x1b0d499 xq8hly8"
-										style="background-image: url(&quot;./images/fb-sprite.png&quot;); background-position: 0px -833px; background-size: auto; width: 20px; height: 20px; background-repeat: no-repeat; display: inline-block; color: #909296b2;"></i>
+									<i data-visualcompletion="css-img"></i>
 									<span>Like</span>
 								</div>
 								<div class="comment-btn">
-									<i data-visualcompletion="css-img" class="x1b0d499 x1d69dk1"
-										style="background-image: url(&quot;./images/fb-sprite.png&quot;); background-position: 0px -812px; background-size: auto; width: 20px; height: 20px; background-repeat: no-repeat; display: inline-block;"></i>
+									<i data-visualcompletion="css-img"></i>
 									<span>Comment</span>
 								</div>
 								<div class="share-btn1">
-									<i data-visualcompletion="css-img" class="x1b0d499 x1d69dk1"
-										style="background-image: url(&quot;./images/fb-sprite.png&quot;); background-position: 0px -896px; background-size: auto; width: 20px; height: 20px; background-repeat: no-repeat; display: inline-block;"></i>
+									<i data-visualcompletion="css-img"></i>
 									<span>Share</span>
 								</div>
 							</div>
@@ -569,8 +572,7 @@ if (
 									<div class="post-profile-name">
 										<span>
 											Mark Zuckerberg
-											<img src="./images/verified.svg" width="12" height="12" alt="Verified account"
-												style="--x-color: var(--accent);">
+											<img src="./images/verified.svg" width="12" height="12" alt="Verified account">
 										</span>
 										<span>
 											December 16 at 10:58 PM <span aria-hidden="true"> · </span>
@@ -583,9 +585,7 @@ if (
 								</div>
 							</div>
 							<div class="post-content">
-								<div dir="auto" style="text-align:start">10/10 song choice from the new Spotify feature on
-									my Oakley Meta glasses
-								</div>
+								<div>10/10 song choice from the new Spotify feature on my Oakley Meta glasses</div>
 								<div class="post-img">
 									<img src="./images/post1.jpg" alt="Post Image">
 								</div>
@@ -593,10 +593,8 @@ if (
 							<div class="post-likes-comments-share">
 								<div class="left-post-likes">
 									<div class="img-reactes">
-										<img class="x16dsc37" height="18" role="presentation" width="18"
-											src="./images/reaction-like.svg">
-										<img class="x16dsc37" height="18" role="presentation" width="18"
-											src="./images/reaction-love.svg">
+										<img height="18" role="presentation" width="18" src="./images/reaction-like.svg">
+										<img height="18" role="presentation" width="18" src="./images/reaction-love.svg">
 									</div>
 									195K
 								</div>
@@ -608,18 +606,15 @@ if (
 							</div>
 							<div class="post-like-comments-share-btn">
 								<div class="like-btn">
-									<i data-visualcompletion="css-img" class="x1b0d499 xq8hly8"
-										style="background-image: url(&quot;./images/fb-sprite.png&quot;); background-position: 0px -833px; background-size: auto; width: 20px; height: 20px; background-repeat: no-repeat; display: inline-block; color: #909296b2;"></i>
+									<i data-visualcompletion="css-img"></i>
 									<span>Like</span>
 								</div>
 								<div class="comment-btn">
-									<i data-visualcompletion="css-img" class="x1b0d499 x1d69dk1"
-										style="background-image: url(&quot;./images/fb-sprite.png&quot;); background-position: 0px -812px; background-size: auto; width: 20px; height: 20px; background-repeat: no-repeat; display: inline-block;"></i>
+									<i data-visualcompletion="css-img"></i>
 									<span>Comment</span>
 								</div>
 								<div class="share-btn1">
-									<i data-visualcompletion="css-img" class="x1b0d499 x1d69dk1"
-										style="background-image: url(&quot;./images/fb-sprite.png&quot;); background-position: 0px -896px; background-size: auto; width: 20px; height: 20px; background-repeat: no-repeat; display: inline-block;"></i>
+									<i data-visualcompletion="css-img"></i>
 									<span>Share</span>
 								</div>
 							</div>
@@ -627,7 +622,7 @@ if (
 					<?php } ?>
 				</div>
 			</div>
-			<div class="about-section" style="display: none;">
+			<div class="about-section hide">
 				<div class="about-content">
 					<div class="left-about-content">
 						<h3>About</h3>
@@ -644,33 +639,33 @@ if (
 						<div class="intro-section">
 							<h4>Bio</h4>
 							<div>
-								<img class="x1b0d499 xep6ejk" height="24" width="24" alt="" src="./images/handwave.svg">
+								<img height="24" width="24" alt="" src="./images/handwave.svg">
 								<p>Bringing the world closer together.</p>
 							</div>
 						</div>
-						<div class="category-section" style="display: none;">
+						<div class="category-section hide" >
 							<h4>Category</h4>
 							<div>
-								<img class="x1b0d499 xep6ejk" height="24" width="24" alt="" src="./images/reels.svg">
+								<img height="24" width="24" alt="" src="./images/reels.svg">
 								<p>Public figure</p>
 							</div>
 						</div>
-						<div class="personal-details-section" style="display: none;">
+						<div class="personal-details-section hide">
 							<h4>Personal details</h4>
 						</div>
-						<div class="work-section" style="display: none;">
+						<div class="work-section hide">
 							<h4>Work</h4>
 						</div>
-						<div class="education-section" style="display: none;">
+						<div class="education-section hide">
 							<h4>Education</h4>
 						</div>
-						<div class="privacy-and-legal-info-section" style="display: none;">
+						<div class="privacy-and-legal-info-section hide">
 							<h4>Privacy and legal info</h4>
 						</div>
 					</div>
 				</div>
 			</div>
-			<div class="friends-section" style="display: none;">
+			<div class="friends-section hide">
 				<div class="friends-content">
 					<div class="friends-content-header">
 						<h3>Friends</h3>
@@ -702,47 +697,51 @@ if (
 		<form class="edit-profile-form" method="post" autocomplete="off"
 			action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" enctype="multipart/form-data">
 			<h2>Edit Profile</h2>
+			<!-- Name, Email, Password, Address, Phone-->
 			<label for="name">Name:</label>
-			<input type="text" id="name" name="name" autocomplete="off"
-				value="<?php echo htmlspecialchars($userFull['name']); ?>">
+			<input type="text" id="name" name="name" autocomplete="off" value="<?php echo htmlspecialchars($userFull['name']); ?>">
+
 			<label for="email">Email:</label>
-			<input type="email" id="email" name="email" autocomplete="off"
-				value="<?php echo htmlspecialchars($userFull['email_id']); ?>">
+			<input type="email" id="email" name="email" autocomplete="off" value="<?php echo htmlspecialchars($userFull['email_id']); ?>">
+
 			<label for="password">New Password:</label>
-			<input type="password" id="password" name="password" autocomplete="new-password"
-				value="<?php echo htmlspecialchars($userFull['password']); ?>" required>
+			<input type="password" id="password" name="password" autocomplete="new-password" value="<?php echo htmlspecialchars($userFull['password']); ?>" required>
+
 			<label for="address">Address:</label>
-			<input type="text" id="address" name="address" autocomplete="off"
-				value="<?php echo htmlspecialchars($userFull['address']); ?>" required>
+			<input type="text" id="address" name="address" autocomplete="off" value="<?php echo htmlspecialchars($userFull['address']); ?>" required>
+
 			<label for="phone">Phone:</label>
-			<input type="text" id="phone" name="phone" autocomplete="off"
-				value="<?php echo htmlspecialchars($userFull['phone']); ?>" required>
+			<input type="text" id="phone" name="phone" autocomplete="off" value="<?php echo htmlspecialchars($userFull['phone']); ?>" required>
+
 			<div class="model-buttons">
 				<button id="profile_save" type="submit" name="update_profile">Save Changes</button>
 			</div>
 		</form>
+
 	</dialog>
 	</div>
 	<script>
-		$(document).ready(function() {
-			$('#profile_edit').click(function() {
-				var model_edit = document.getElementById('model_edit');
-				model_edit.showModal();
+		$(document).ready(function () {
+			$('#profile_edit').click(function () {
+				var modelEdit = document.getElementById('model_edit');
+				modelEdit.showModal();
 				// disable scroll bar
 				document.body.style.overflow = 'hidden';
 				// enable scroll bar on close
-				model_edit.addEventListener('close', function() {
-					document.body.style.overflow = 'auto';
+				modelEdit.addEventListener('close', function () {
+					document.body.style.overflow = '';
 				});
 
 			});
-			$('#profile_save').click(function() {
+
+			// AJAX form submit handler
+			$('#profile_save').click(function () {
 				// Get and trim the value to check it
-				var profileName = $('input[name="name"]').val().trim();
-				var profileEmail = $('input[name="email"]').val().trim();
-				var profilePassword = $('input[name="password"]').val().trim();
-				var profileAddress = $('input[name="address"]').val().trim();
-				var profilePhone = $('input[name="phone"]').val().trim();
+				var profileName = $('#name').val().trim();
+				var profileEmail = $('#email').val().trim();
+				var profilePassword = $('#password').val().trim();
+				var profileAddress = $('#address').val().trim();
+				var profilePhone = $('#phone').val().trim();
 				console.log(profileName, profileEmail, profilePassword, profileAddress, profilePhone);
 
 
@@ -753,25 +752,18 @@ if (
 						'&preProfileAddress=' + encodeURIComponent(profileAddress) +
 						'&preProfilePhone=' + encodeURIComponent(profilePhone);
 
-
+					// AJAX request to submit the form data
 					$.ajax({
 						type: "POST",
 						url: window.location.href, // Explicitly sends to the current page URL
 						data: dataString,
 						cache: false,
-						success: function(response) {
-							var model_edit = document.getElementById('model_edit');
-							model_edit.close();
+						success: function (response) {
+							var modelEdit = document.getElementById('model_edit');
+							modelEdit.close();
 
 
-						},
-						// capture error and display alert width messenger
-						error: function(xhr, status, error) {
-							alert("An error occurred: " + error);
 						}
-
-
-
 					});
 				}
 				return false;
@@ -779,23 +771,23 @@ if (
 
 			var userName = "<?php echo htmlspecialchars($user_name) ?>";
 
-			$('.profile-wrapper').click(function() {
+			$('.profile-wrapper').click(function () {
 				$('#dropdown-menu').toggle('slide');
 			});
 			$('#currunt-post').hide();
 			// enable submit button when input is not empty
-			$('input[name="post-text"]').on('input', function() {
+			$('.post-text-input').on('input', function () {
 				if ($(this).val().trim() !== '') {
-					$('button[type="submit"]').prop('disabled', false);
+					$('#post-form').prop('disabled', false);
 				} else {
-					$('button[type="submit"]').prop('disabled', true);
+					$('#post-form').prop('disabled', true);
 				}
 			});
 
 			// form submit handler
-			$('#post-form').click(function() {
+			$('#post-form').click(function () {
 				// Get and trim the value to check it
-				var posttext = $('input[name="post-text"]').val().trim();
+				var posttext = $('.post-text-input').val().trim();
 
 				if (posttext) {
 					var dataString = 'preText=' + encodeURIComponent(posttext);
@@ -805,82 +797,68 @@ if (
 						url: window.location.href, // Explicitly sends to the current page URL
 						data: dataString,
 						cache: false,
-						success: function(response) {
-							// 1. Alert the original value entered by the user
-							// alert("Value sent: " + posttext);
-
+						success: function (response) {
 							$('#currunt-post').prepend(`<div class="post-card">
-								<div class="post-card-header">
-									<div class="left-post-card-header">
-										<div class="post-profile-image">
-											<img src="./images/user_<?php echo $_SESSION['user_id'] ?>.jpg"
-												alt="Profile Picture">
-										</div>
-										<div class="post-profile-name">
-											<span><?php echo ucfirst($userFull['name']) ?> </span>
-											<span><?php echo date('F j \\a\\t g:i A'); ?> <span aria-hidden="true"> · </span> <img src="./images/public.svg" width="12" height="12" alt="Shared with Public"></span>
-										</div>
+							<div class="post-card-header">
+								<div class="left-post-card-header">
+									<div class="post-profile-image">
+										<img src="./images/user_<?php echo $_SESSION['user_id'] ?>.jpg" alt="Profile Picture">
 									</div>
-									<div class="right-post-card-header">
-										<img src="./images/post-menu.svg" width="20" height="20" alt="Post menu">
-									</div>
-				
-								</div>
-								<div class="post-content">
-									<div dir="auto" style="text-align:start"> ${posttext}  </div>
-								</div>
-								<div class="post-likes-comments-share">
-									<div class="left-post-likes">
-										<div class="img-reactes">
-											<img class="x16dsc37" height="18" role="presentation" width="18"
-												src="./images/reaction-like.svg">
-											<img class="x16dsc37" height="18" role="presentation" width="18"
-												src="./images/reaction-love.svg">
-										</div> 195K
-									</div>
-									<div class="right-post-likes">
-										<span>1.2M comments</span>
-										<span>34K shares</span>
-										<span>9.6M views</span>
+									<div class="post-profile-name">
+										<span><?php echo ucfirst($userFull['name']) ?> </span>
+										<span><?php echo date('F j \\a\\t g:i A'); ?> <span aria-hidden="true"> · </span> <img src="./images/public.svg" width="12" height="12" alt="Shared with Public"></span>
 									</div>
 								</div>
-								<div class="post-like-comments-share-btn">
-									<div class="like-btn">
-										<i data-visualcompletion="css-img" class="x1b0d499 xq8hly8"
-											style="background-image: url(&quot;./images/fb-sprite.png&quot;); background-position: 0px -833px; background-size: auto; width: 20px; height: 20px; background-repeat: no-repeat; display: inline-block; color: #909296b2;"></i>
-										<span>Like</span>
-									</div>
-									<div class="comment-btn">
-										<i data-visualcompletion="css-img" class="x1b0d499 x1d69dk1"
-											style="background-image: url(&quot;./images/fb-sprite.png&quot;); background-position: 0px -812px; background-size: auto; width: 20px; height: 20px; background-repeat: no-repeat; display: inline-block;"></i>
-										<span>Comment</span>
-									</div>
-									<div class="share-btn1">
-										<i data-visualcompletion="css-img" class="x1b0d499 x1d69dk1"
-											style="background-image: url(&quot;./images/fb-sprite.png&quot;); background-position: 0px -896px; background-size: auto; width: 20px; height: 20px; background-repeat: no-repeat; display: inline-block;"></i>
-										<span>Share</span>
-									</div>
+								<div class="right-post-card-header">
+									<img src="./images/post-menu.svg" width="20" height="20" alt="Post menu">
 								</div>
-							</div>`).show('slow');
+			
+							</div>
+							<div class="post-content">
+								<div> ${posttext}  </div>
+							</div>
+							<div class="post-likes-comments-share">
+								<div class="left-post-likes">
+									<div class="img-reactes">
+										<img height="18" role="presentation" width="18"
+											src="./images/reaction-like.svg">
+										<img height="18" role="presentation" width="18"
+											src="./images/reaction-love.svg">
+									</div> 195K
+								</div>
+								<div class="right-post-likes">
+									<span>1.2M comments</span>
+									<span>34K shares</span>
+									<span>9.6M views</span>
+								</div>
+							</div>
+							<div class="post-like-comments-share-btn">
+								<div class="like-btn">
+									<i data-visualcompletion="css-img"></i>
+									<span>Like</span>
+								</div>
+								<div class="comment-btn">
+									<i data-visualcompletion="css-img"></i>
+									<span>Comment</span>
+								</div>
+								<div class="share-btn1">
+									<i data-visualcompletion="css-img"></i>
+									<span>Share</span>
+								</div>
+							</div>
+						</div>`).show('slow');
 
 							// 2. Clear input and disable button
-							$('input[name="post-text"]').val('');
-							$('button[type="submit"]').prop('disabled', true);
-						},
-						// capture error and display alert width messenger
-						error: function(xhr, status, error) {
-							alert("An error occurred: " + error);
+							$('.post-text-input').val('');
+							$('#post-form').prop('disabled', true);
 						}
-
-
-
 					});
 				}
 				return false;
 			});
 
 			// tab active class bace on that clik change section in .post-section-boady
-			$('.left-profile-bottom-tab span').click(function() {
+			$('.left-profile-bottom-tab span').click(function () {
 				$('.left-profile-bottom-tab span').removeClass('active-tab');
 				$(this).addClass('active-tab');
 
@@ -901,7 +879,7 @@ if (
 				}
 			});
 			// about section left menu click function
-			$('.left-about-content ul li').click(function() {
+			$('.left-about-content ul li').click(function () {
 				$('.left-about-content ul li').removeClass('active');
 				$(this).addClass('active');
 				var sectionText = $(this).text().toLowerCase().replace(/\s+/g, '-');
@@ -910,9 +888,9 @@ if (
 			});
 
 			// friends search bar function
-			$('#friends-search').on('input', function() {
+			$('#friends-search').on('input', function () {
 				var value = $(this).val().toLowerCase();
-				$('#my-friends-list .friend-card').each(function() {
+				$('#my-friends-list .friend-card').each(function () {
 					var friendName = $(this).find('.friend-profile-name span').text().toLowerCase();
 					if (friendName.includes(value)) {
 						$(this).show();
