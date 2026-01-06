@@ -17,62 +17,64 @@ if (isset($_SESSION['user_id'])) {
 	$loggedUser = [
 		'user_id' => $_SESSION['user_id']
 	];
-}
-
-// If no active session, send the user back to the login page
-if (!$loggedIn) {
-	header('Location: login.php');
+}else{
+	header('Location: logout.php');
 	exit;
 }
 
-// Fetch all users from the database
-$stmt = $conn->query("SELECT * FROM tUser");
-$users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// If no active session, send the user back to the logout page
+if (!$loggedIn) {
+	header('Location: logout.php');
+	exit;
+}
 
 // Get the profile id from the URL parameter, if present
-$id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+$userId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
 
 // If the user is logged in, fetch the full user record for the current user
-$userFull = null;
+$userDetails = null;
 if ($loggedIn) {
 	$uStmt = $conn->prepare('SELECT * FROM tUser WHERE user_id = :id LIMIT 1');
 	$uStmt->execute([':id' => $loggedUser['user_id']]);
-	$userFull = $uStmt->fetch(PDO::FETCH_ASSOC);
+	$userDetails = $uStmt->fetch(PDO::FETCH_ASSOC);
+	// check if user exists
+	if (!$userDetails) {
+		header('Location: logout.php');
+		exit;
+	}
+
 
 	// check for profile id in parameter
-	if ($id) {
+	if ($userId) {
 		$pStmt = $conn->prepare('SELECT * FROM tUser WHERE user_id = :id LIMIT 1');
-		$pStmt->execute([':id' => $id]);
-		$profileFull = $pStmt->fetch(PDO::FETCH_ASSOC);
-		if (!$profileFull) {
+		$pStmt->execute([':id' => $userId]);
+		$profileDetails = $pStmt->fetch(PDO::FETCH_ASSOC);
+		if (!$profileDetails) {
 			// remove parameter and redirect index.php
 			header('Location: index.php');
 			exit;
 		}
 	}
+	// list all friends
+	if (!$userId) {
+		$fStmt = $conn->prepare("SELECT tUser.* FROM tUser JOIN tFriends ON tUser.user_id = tFriends.friend_id WHERE tFriends.user_id = :id");
+		$fStmt->execute([":id" => $loggedUser["user_id"]]);
+		$friendList = $fStmt->fetchAll(PDO::FETCH_ASSOC);
+		$pStmt = $conn->prepare("SELECT tWall.*, tUser.name FROM tWall JOIN tUser ON tWall.user_id = tUser.user_id WHERE tWall.user_id = :id OR tWall.user_id IN (SELECT friend_id FROM tFriends WHERE user_id = :id) ");
+		$pStmt->execute([':id' => $loggedUser['user_id']]);
+		$posts = $pStmt->fetchAll(PDO::FETCH_ASSOC);
+	} else {
+		$friendList = $conn->prepare("SELECT tUser.* FROM tUser JOIN tFriends ON tUser.user_id = tFriends.friend_id WHERE tFriends.user_id = :id");
+		$friendList->execute([":id" => $userId]);
+		$friendList = $friendList->fetchAll(PDO::FETCH_ASSOC);
+		$posts = $conn->prepare('SELECT * FROM tWall WHERE user_id = :id');
+		$posts->execute([':id' => $userId]);
+		$posts = $posts->fetchAll(PDO::FETCH_ASSOC);
+	}
 }
 
-// list all posts
-if (!$id) {
-	$pStmt = $conn->prepare("SELECT tWall.*, tUser.name FROM tWall JOIN tUser ON tWall.user_id = tUser.user_id WHERE tWall.user_id = :id OR tWall.user_id IN (SELECT friend_id FROM tFriends WHERE user_id = :id) ");
-	$pStmt->execute([':id' => $loggedUser['user_id']]);
-	$posts = $pStmt->fetchAll(PDO::FETCH_ASSOC);
-} else {
-	$posts = $conn->prepare('SELECT * FROM tWall WHERE user_id = :id');
-	$posts->execute([':id' => $id]);
-	$posts = $posts->fetchAll(PDO::FETCH_ASSOC);
-}
-// list all friends
-if (!$id) {
-	$fStmt = $conn->prepare("SELECT tUser.* FROM tUser JOIN tFriends ON tUser.user_id = tFriends.friend_id WHERE tFriends.user_id = :id");
-	$fStmt->execute([":id" => $loggedUser["user_id"]]);
-	$friendList = $fStmt->fetchAll(PDO::FETCH_ASSOC);
-} else {
-	$friendList = $conn->prepare("SELECT tUser.* FROM tUser JOIN tFriends ON tUser.user_id = tFriends.friend_id WHERE tFriends.user_id = :id");
-	$friendList->execute([":id" => $id]);
-	$friendList = $friendList->fetchAll(PDO::FETCH_ASSOC);
-}
 
 
 // Handle new post form submission
@@ -198,9 +200,9 @@ if (
 				<!-- Dropdown menu items -->
 				<ul class="dropdown-menu-profile" id="dropdown-menu">
 					<div class="user-name-section" id="profile_edit">
-						<img src="./images/user_<?php echo $_SESSION['user_id'] ?>.jpg" alt="user profile" class="dropdown-profile-icon" height="40" width="40">
+						<img src="./images/user_<?php echo $userDetails['user_id'] ?>.jpg" alt="user profile" class="dropdown-profile-icon" height="40" width="40">
 						<div class="user-name-role">
-							<span class="user-name"><?php echo ucfirst($userFull['name']); ?></span>
+							<span class="user-name"><?php echo ucfirst($userDetails['name']); ?></span>
 						</div>
 					</div>
 					<li>
@@ -242,7 +244,7 @@ if (
 				<div class="profile-info">
 					<div class="info-section">
 						<div class="profile-image">
-							<img height="100%" src="./images/<?php if ($profileFull) { echo "user_" . $profileFull['user_id'] . '.jpg'; } else { echo "mark-zuck.jpg"; } ?>" width="100%" alt="Profile Picture">
+							<img height="100%" src="./images/<?php if ($profileDetails) { echo "user_" . $profileDetails['user_id'] . '.jpg'; } else { echo "user_" . $userDetails['user_id'] . '.jpg'; } ?>" width="100%" alt="Profile Picture">
 						</div>
 						<div class="profile-content">
 							<div class="name-follow">
@@ -250,7 +252,7 @@ if (
 									<div class="row-content">
 										<div class="col-content">
 											<h1>
-												<?php if ($profileFull) { echo ucfirst($profileFull['name']); } else { echo 'Mark Zuckerberg'; } ?>
+												<?php if ($profileDetails) { echo ucfirst($profileDetails['name']); } else { echo $userDetails['name']; } ?>
 											</h1>
 											<span class="verfiy-icon">
 												<img src="./images/verified.svg" width="16" height="16" alt="Verified account">
@@ -420,7 +422,7 @@ if (
 							<span>Filters</span>
 						</span>
 					</div>
-					<?php if (!$id) { ?>
+					<?php if (!$userId) { ?>
 						<div class="post-form-card">
 							<!-- simple one textarea and submit button -->
 							<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
@@ -432,7 +434,7 @@ if (
 									</div>
 									<div class="right-post-form-card-header">
 										<input type="text" name="post-text" class="post-text-input"
-											placeholder="What's on your mind, <?php echo ucfirst($userFull['name']); ?>">
+											placeholder="What's on your mind, <?php echo ucfirst($userDetails['name']); ?>">
 									</div>
 								</div>
 								<div class="submit-btn">
@@ -447,8 +449,8 @@ if (
 					if ($posts)
 						foreach ($posts as $post) {
 							$date_time = date("F j \\a\\t g:i A", strtotime($post['posting_date']));
-							if ($id) {
-								$user_name = ucfirst($profileFull['name']);
+							if ($userId) {
+								$user_name = ucfirst($profileDetails['name']);
 							} else {
 								$user_name = ucfirst($post['name']);
 							}
@@ -508,7 +510,7 @@ if (
 					;
 
 					?>
-					<?php if (!$id) { ?>
+					<?php if (!$userId) { ?>
 						<div class="post-card">
 							<div class="post-card-header">
 								<div class="left-post-card-header">
@@ -699,19 +701,19 @@ if (
 			<h2>Edit Profile</h2>
 			<!-- Name, Email, Password, Address, Phone-->
 			<label for="name">Name:</label>
-			<input type="text" id="name" name="name" autocomplete="off" value="<?php echo htmlspecialchars($userFull['name']); ?>">
+			<input type="text" id="name" name="name" autocomplete="off" value="<?php echo htmlspecialchars($userDetails['name']); ?>">
 
 			<label for="email">Email:</label>
-			<input type="email" id="email" name="email" autocomplete="off" value="<?php echo htmlspecialchars($userFull['email_id']); ?>">
+			<input type="email" id="email" name="email" autocomplete="off" value="<?php echo htmlspecialchars($userDetails['email_id']); ?>">
 
 			<label for="password">New Password:</label>
-			<input type="password" id="password" name="password" autocomplete="new-password" value="<?php echo htmlspecialchars($userFull['password']); ?>" required>
+			<input type="password" id="password" name="password" autocomplete="new-password" value="<?php echo htmlspecialchars($userDetails['password']); ?>" required>
 
 			<label for="address">Address:</label>
-			<input type="text" id="address" name="address" autocomplete="off" value="<?php echo htmlspecialchars($userFull['address']); ?>" required>
+			<input type="text" id="address" name="address" autocomplete="off" value="<?php echo htmlspecialchars($userDetails['address']); ?>" required>
 
 			<label for="phone">Phone:</label>
-			<input type="text" id="phone" name="phone" autocomplete="off" value="<?php echo htmlspecialchars($userFull['phone']); ?>" required>
+			<input type="text" id="phone" name="phone" autocomplete="off" value="<?php echo htmlspecialchars($userDetails['phone']); ?>" required>
 
 			<div class="model-buttons">
 				<button id="profile_save" type="submit" name="update_profile">Save Changes</button>
@@ -805,7 +807,7 @@ if (
 										<img src="./images/user_<?php echo $_SESSION['user_id'] ?>.jpg" alt="Profile Picture">
 									</div>
 									<div class="post-profile-name">
-										<span><?php echo ucfirst($userFull['name']) ?> </span>
+										<span><?php echo ucfirst($userDetails['name']) ?> </span>
 										<span><?php echo date('F j \\a\\t g:i A'); ?> <span aria-hidden="true"> · </span> <img src="./images/public.svg" width="12" height="12" alt="Shared with Public"></span>
 									</div>
 								</div>
