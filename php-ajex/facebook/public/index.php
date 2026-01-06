@@ -62,14 +62,16 @@ if ($loggedIn) {
 		$fStmt = $conn->prepare("SELECT tUser.* FROM tUser JOIN tFriends ON tUser.user_id = tFriends.friend_id WHERE tFriends.user_id = :id");
 		$fStmt->execute([":id" => $loggedUser["user_id"]]);
 		$friendList = $fStmt->fetchAll(PDO::FETCH_ASSOC);
-		$pStmt = $conn->prepare("SELECT tWall.*, tUser.name FROM tWall JOIN tUser ON tWall.user_id = tUser.user_id WHERE tWall.user_id = :id OR tWall.user_id IN (SELECT friend_id FROM tFriends WHERE user_id = :id) ");
+		// fetch posts from user and friends descending order based on posting_date
+
+		$pStmt = $conn->prepare("SELECT tWall.*, tUser.name FROM tWall JOIN tUser ON tWall.user_id = tUser.user_id WHERE tWall.user_id = :id OR tWall.user_id IN (SELECT friend_id FROM tFriends WHERE user_id = :id) ORDER BY tWall.posting_date DESC");
 		$pStmt->execute([':id' => $loggedUser['user_id']]);
 		$posts = $pStmt->fetchAll(PDO::FETCH_ASSOC);
 	} else {
 		$friendList = $conn->prepare("SELECT tUser.* FROM tUser JOIN tFriends ON tUser.user_id = tFriends.friend_id WHERE tFriends.user_id = :id");
 		$friendList->execute([":id" => $userId]);
 		$friendList = $friendList->fetchAll(PDO::FETCH_ASSOC);
-		$posts = $conn->prepare('SELECT * FROM tWall WHERE user_id = :id');
+		$posts = $conn->prepare('SELECT * FROM tWall WHERE user_id = :id ORDER BY posting_date DESC');
 		$posts->execute([':id' => $userId]);
 		$posts = $posts->fetchAll(PDO::FETCH_ASSOC);
 	}
